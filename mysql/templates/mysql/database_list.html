@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block content %}
+	<h1>{% trans "Databases" %}</h1>
+
+	<a href="{% url "mysql_database_add" %}" class="btn btn-success pull-right">{% bootstrap_icon "plus" %} New</a>
+
+	<table class="table table-striped table-condensed table-hover">
+		<thead>
+		<tr>
+			<th>Username</th><th>Database</th><th>&nbsp;</th>
+		</tr>
+		</thead>
+		{% for database in object_list %}
+		<tr>
+			<td><a href="{% url "mysql_database_update" database.name %}">{{ database.name }}</a></td>
+			<td>{{ database.database }}</td>
+			<td>
+				<form action="{% url "mysql_database_delete" database.name %}" method="post">
+					{% csrf_token %}
+					<input type="hidden" name="name" value="{{ database.name }}">
+					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>
+				</form>
+			</td>
+		</tr>
+	    {% endfor %}
+	</table>
+{% endblock %}
