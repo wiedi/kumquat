@@ -17,14 +17,15 @@ def meminfo():
 			out = check_output(["kstat", "-p", "memory_cap:*:*:"]).strip()
 			mem = dict([(x[0].split(':')[-1], x[1]) for x in (l.split() for l in out.split("\n"))])
 			return {
-				'mem_cap':	 int(mem['physcap']),
-				'mem_used':	 int(mem['rss']),
-				'mem_free':	 int(mem['physcap']) - int(mem['rss']),
-				'mem_use':	 int((int(mem['rss']) / float(mem['physcap'])) * 100),
+				'mem_cap':   int(mem['physcap']),
+				'mem_used':  int(mem['rss']),
+				'mem_free':  int(mem['physcap']) - int(mem['rss']),
+				'mem_use':   int((int(mem['rss']) / float(mem['physcap'])) * 100),
 
-				'swap_cap':	 int(mem['swapcap']),
+				'swap_cap':  int(mem['swapcap']),
 				'swap_used': int(mem['swap']),
 				'swap_free': int(mem['swapcap']) - int(mem['swap']),
+				'swap_use':  int((int(mem['swap']) / float(mem['swapcap'])) * 100),
 
 				'mem_nover': mem['nover'],
 			}
@@ -47,9 +48,9 @@ def diskinfo():
 		out = check_output(["df", "/"]).strip().split('\n')
 		vals = out[-1].split()
 		return {
-				'size': vals[1],
-				'used': vals[2],
-				'free': vals[3],
+				'size': int(vals[1]) * 1024,
+				'used': int(vals[2]) * 1024,
+				'free': int(vals[3]) * 1024,
 				'use':  int((int(vals[2]) / float(vals[1])) * 100),
 		}
 

@@ -11,14 +11,11 @@
 <tbody>
 	<tr><th>Hostname</th><td>{{info.hostname}}</td></tr>
 	{% if info.datacenter_name %}
-		<tr><th>Hostname</th><td>{{info.datacenter_name}}</td></tr>
-	{% endif %}
-	{% if info.datacenter_name %}
 		<tr><th>Datacenter</th><td>{{info.datacenter_name}}</td></tr>
 	{% endif %}
 	
 	{% if info.live_image %}
-		<tr><th>Live Image</th><td>{{info.live_image}}</td></tr>
+		<tr><th>Host Image</th><td>{{info.live_image}}</td></tr>
 	{% endif %}
 	{% if info.image %}
 		<tr><th>Image</th><td><span title="Base: {{info.base_image}}">{{info.image}}</span></td></tr>
