@@ -38,6 +38,7 @@ INSTALLED_APPS = (
 	'web',
 	'mysql',
 	'ftp',
+	'status',
 )
 
 MIDDLEWARE_CLASSES = (

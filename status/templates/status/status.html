@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+<h1>{% trans "Overview" %}</h1>
+
+
+<table class="table table-bordered table-hover">
+<tbody>
+	<tr><th>Hostname</th><td>{{info.hostname}}</td></tr>
+	{% if info.datacenter_name %}
+		<tr><th>Hostname</th><td>{{info.datacenter_name}}</td></tr>
+	{% endif %}
+	{% if info.datacenter_name %}
+		<tr><th>Datacenter</th><td>{{info.datacenter_name}}</td></tr>
+	{% endif %}
+	
+	{% if info.live_image %}
+		<tr><th>Live Image</th><td>{{info.live_image}}</td></tr>
+	{% endif %}
+	{% if info.image %}
+		<tr><th>Image</th><td><span title="Base: {{info.base_image}}">{{info.image}}</span></td></tr>
+	{% endif %}
+
+	<tr>
+		<th>Load</th>
+		<td>
+			<span class="badge">{{info.loadavg.0|floatformat}}</span>
+			<span class="badge">{{info.loadavg.1|floatformat}}</span>
+			<span class="badge">{{info.loadavg.2|floatformat}}</span>
+		</td>
+	</tr>
+	
+	{% if info.cpu_cores %}
+		<tr><th>CPU Cores</th><td>{{info.cpu_cores}}</td></tr>
+	{% endif %}
+	
+	<tr>
+		<th>Disk</th>
+		<td>
+			<div class="progress">
+			  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{info.disk.use}}%;">
+			    {{info.disk.used|filesizeformat}} / {{info.disk.size|filesizeformat}}
+			  </div>
+			</div>
+		</td>
+	</tr>
+	
+	{% if info.mem.mem_cap %}
+	<tr>
+		<th>RAM</th>
+		<td>
+			<div class="progress">
+			  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{info.mem.mem_use}}%;">
+			    {{info.mem.mem_used|filesizeformat}} / {{info.mem.mem_cap|filesizeformat}}
+			  </div>
+			</div>
+		</td>
+	</tr>
+	
+	<tr>
+		<th>Swap</th>
+		<td>
+			<div class="progress">
+			  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{info.mem.swap_use}}%;">
+			    {{info.mem.swap_used|filesizeformat}} / {{info.mem.swap_cap|filesizeformat}}
+			  </div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<th>Numer over memory cap</th>
+		<td>{{info.mem.mem_nover}}</td>
+	</tr>
+	{% endif %}
+</tr>
+</tbody>
+</table>
+
+
+
+{% endblock %}
