@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block content %}
+	<h1>{% trans "VHosts" %}</h1>
+
+	<a href="{% url "web_vhost_add" %}" class="btn btn-success pull-right">{% bootstrap_icon "plus" %} New</a>
+
+	{% if object_list %}
+	<table class="table table-striped table-condensed table-hover">
+		<thead>
+		<tr>
+			<th>{% trans "VHost" %}</th>
+			<th>{% trans "SSL" %}</th>
+			<th>{% trans "Catch-All" %}</th>
+			<th>&nbsp;</th>
+		</tr>
+		</thead>
+		{% for vhost in object_list %}
+		<tr>
+			<td><a href="{% url "web_vhost_update" vhost.pk %}">{{ vhost }}</a></td>
+			<td>{% if vhost.cert %}{% bootstrap_icon "ok" %}{% else %}{% bootstrap_icon "remove" %}{% endif %}</td>
+			<td>
+				{% if vhost.defaultvhost_set.count %}
+					{% bootstrap_icon "ok" %}
+					<form action="{% url "web_vhost_catchall_delete" vhost.defaultvhost_set.get.pk %}" method="post" class="pull-right">
+						{% csrf_token %}
+						<input type="submit" value="{% trans "Delete Catch-All" %}" class="btn btn-xs btn-default"/>
+					</form>
+				{% else %}
+					{% bootstrap_icon "remove" %}
+					<form action="{% url "web_vhost_catchall_set" vhost.pk %}" method="post" class="pull-right">
+						{% csrf_token %}
+						<input type="submit" value="{% trans "Set Catch-All" %}" class="btn btn-xs btn-default"/>
+					</form>
+				{% endif %}
+			</t><td>
+				<form action="{% url "web_vhost_delete" vhost.pk %}" method="post" class="pull-left">
+					{% csrf_token %}
+					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>
+				</form>
+			</td>
+		</tr>
+	    {% endfor %}
+	</table>
+    {% else %}
+        <p>{% trans "You don't have any VHosts yet." %}</p>
+    {% endif %}
+{% endblock %}

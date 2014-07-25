@@ -51,3 +51,7 @@ def parseAsn1Generalizedtime(value):
 
 def x509name_to_str(on):
 	return ', '.join([x[0] + '=' + x[1] for x in on.get_components()])
+
+def serial_to_hex(serial):
+	return ':'.join(map(''.join, zip(*[iter(hex(serial)[2:].strip('L')[::])]*2)))
+

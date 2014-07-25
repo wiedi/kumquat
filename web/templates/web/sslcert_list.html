@@ -12,6 +12,7 @@
 		<thead>
 		<tr>
 			<th>{% trans "Common Name" %}</th>
+			<th>{% trans "Serial" %}</th>
 			<th>{% trans "Valid not before" %}</th>
 			<th>{% trans "Valid not after" %}</th>
 			<th>&nbsp;</th>
@@ -20,6 +21,7 @@
 		{% for cert in object_list %}
 		<tr>
 			<td><span title="{{ cert.issuer }}">{{ cert.cn }}</td>
+			<td>{{ cert.serial }}</td>
 			<td>{{ cert.valid_not_before }}</td>
 			<td>{{ cert.valid_not_after }}</td>
 			<td>
