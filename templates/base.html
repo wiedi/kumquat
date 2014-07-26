@@ -41,6 +41,13 @@
 		  padding-right: 20px;
 		  padding-left: 20px;
 		}
+		.nav-sidebar > li > h5 {
+			padding: 10px 20px;
+			color: #555;
+			margin: 0;
+			border-bottom: 1px solid #ccc;
+			font-size: 14px;
+		}
 		.nav-sidebar > .active > a,
 		.nav-sidebar > .active > a:hover,
 		.nav-sidebar > .active > a:focus {
@@ -50,12 +57,6 @@
 		.main {
 		  padding: 20px;
 		}
-	/*	@media (min-width: 768px) {
-		  .main {
-		    padding-right: 40px;
-		    padding-left: 40px;
-		  }
-		}*/
 		.main h1:first-of-type {
 		  margin-top: 0;
 		}
@@ -69,7 +70,7 @@
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		  <div class="container-fluid">
 			<div class="navbar-header">
-			  <a class="navbar-brand" href="#">Kumquat</a>
+			  <a class="navbar-brand" href="{% url 'status' %}">Kumquat</a>
 			</div>
 			<div class="navbar-collapse collapse">
 			  <ul class="nav navbar-nav navbar-right">
@@ -83,12 +84,19 @@
 			<div class="row">
 				<div class="col-xs-4 col-sm-3 col-md-2 sidebar">
 					<ul class="nav nav-sidebar">
+						<li><h5>System</h5></li>
 						<li><a href="{% url 'status' %}">Overview</a></li>
 						<li><a href="{% url 'domain_list' %}">Domains</a></li>
-						<li><a href="{% url 'web_vhost_list' %}">Web VHosts</a></li>
+						<li><h5>Web</h5></li>
+						<li><a href="{% url 'web_vhost_list' %}">VHosts</a></li>
 						<li><a href="{% url 'web_sslcert_list' %}">SSL Certificates</a></li>
-						<li><a href="{% url 'mysql_database_list' %}">MySQL</a></li>
-						<li><a href="{% url 'ftp_account_list' %}">FTP Accounts</a></li>
+						<li><h5>MySQL</h5></li>
+						<li><a href="{% url 'mysql_database_list' %}">Databases</a></li>
+						<li><h5>Email</h5></li>
+						<li><a href="#">Accounts</a></li>
+						<li><a href="#">Aliases</a></li>
+						<li><h5>FTP</h5></li>
+						<li><a href="{% url 'ftp_account_list' %}">Accounts</a></li>
 					</ul>
 				</div>
 				<div class="col-xs-8 col-xs-offset-4 col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
