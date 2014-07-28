@@ -90,5 +90,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-# mysql
+# kumquat
 
+KUMQUAT_CERT_PATH     = '/opt/local/etc/openssl/httpd/'
+KUMQUAT_VHOST_CONFIG  = '/opt/local/etc/httpd/vhosts.conf'
+KUMQUAT_VHOST_ROOT    = '/srv/www/'
+KUMQUAT_VHOST_UID     = 501
+KUMQUAT_VHOST_GID     = 12
+KUMQUAT_USE_ZFS       = False
+KUMQUAT_VHOST_DATASET = 'zones/9183a8f7-dfe9-42a2-b2f3-647e698b916c/data/www'
+KUMQUAT_WEBSERVER_RELOAD = 'svcadm refresh apache'

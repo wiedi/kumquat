@@ -1,7 +1,9 @@
 from django.db import models
+from django.conf import settings
 from OpenSSL import SSL, crypto
 from x509 import parseAsn1Generalizedtime, x509name_to_str, serial_to_hex
 from kumquat.models import Domain
+import re
 
 default_length = 255
 
@@ -11,6 +13,9 @@ class VHost(models.Model):
 	cert   = models.ForeignKey('SSLCert', blank=True, null=True, on_delete=models.SET_NULL, verbose_name='SSL Certificate')
 
 	unique_together = (("name", "domain"),)
+
+	def webroot(self):
+		return settings.KUMQUAT_VHOST_ROOT + '/' + str(self)
 
 	def __unicode__(self):
 		return unicode(self.name) + '.' + unicode(self.domain)
@@ -45,6 +50,17 @@ class SSLCert(models.Model):
 		self.serial  = serial_to_hex(cert.get_serial_number())
 		self.valid_not_before = parseAsn1Generalizedtime(cert.get_notBefore())
 		self.valid_not_after  = parseAsn1Generalizedtime(cert.get_notAfter())
+
+	def bundle_name(self):
+		"returns a string that could be used as filename"
+		fname = str(self.pk) + '-' + re.sub(r"[^a-z._-]", "", self.cn.lower()) + '.pem'
+		return settings.KUMQUAT_CERT_PATH + '/' + fname
+
+	def write_bundle(self):
+		with open(self.bundle_name(), "w") as f:
+			f.write(self.cert)
+			f.write(self.key)
+			f.write(self.ca)
 
 	def __unicode__(self):
 		return self.cn + ' (' + self.serial + ')'
