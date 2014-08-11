@@ -43,6 +43,8 @@ def update_filesystem():
 			call(['zfs', 'set', 'core:delete_soon=0', ds])
 		else:
 			os.makedirs(webroot(vhost))
+		os.makedirs(webroot(vhost) + '/htdocs')
+		os.makedirs(webroot(vhost) + '/logs')
 		os.chown(webroot(vhost), settings.KUMQUAT_VHOST_UID, settings.KUMQUAT_VHOST_GID)
 
 	for vhost in remove:
