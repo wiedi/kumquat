@@ -65,7 +65,6 @@ def info():
 				'live_image': sys.get('Live Image', ''),
 
 				'hostname':        socket.gethostname(),
-				'datacenter_name': mdata('sdc:datacenter_name'),
 
 				'image':      img.get('Image'),
 				'base_image': img.get('Base Image', '').replace(' ', '-'),
