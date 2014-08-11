@@ -35,7 +35,7 @@ def update_filesystem():
 	
 	for vhost in create:
 		if settings.KUMQUAT_USE_ZFS:
-			ds = KUMQUAT_VHOST_DATASET + '/' + vhost
+			ds = settings.KUMQUAT_VHOST_DATASET + '/' + vhost
 			try:
 				call(['zfs', 'create', ds])
 			except:
@@ -47,7 +47,7 @@ def update_filesystem():
 
 	for vhost in remove:
 		if settings.KUMQUAT_USE_ZFS:
-			call(['zfs', 'set', 'core:delete_soon=1', KUMQUAT_VHOST_DATASET + '/' + vhost])
+			call(['zfs', 'set', 'core:delete_soon=1', settings.KUMQUAT_VHOST_DATASET + '/' + vhost])
 		else:
 			os.rename(webroot(vhost), settings.KUMQUAT_VHOST_ROOT + '/.Trash/' + vhost)
 
@@ -64,4 +64,3 @@ class Command(BaseCommand):
 		write_vhost_config()
 		update_filesystem()
 		reload_webserver()
-		
