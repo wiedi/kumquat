@@ -3,8 +3,9 @@ from django.views.generic import ListView
 from django.views.generic.edit import FormView
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.db import connections
-
+from kumquat.utils import LoginRequiredMixin
 from forms import *
 
 def list_databases(*kwargs):
@@ -21,11 +22,11 @@ def list_databases(*kwargs):
 		return dbs
 
 
-class DatabaseList(ListView):
+class DatabaseList(LoginRequiredMixin, ListView):
 	template_name = 'mysql/database_list.html'
 	get_queryset  = list_databases
 
-class DatabaseCreate(FormView):
+class DatabaseCreate(LoginRequiredMixin, FormView):
 	template_name = 'mysql/database_form.html'
 	success_url   = reverse_lazy('mysql_database_list')
 	form_class    = DatabaseCreateForm
@@ -34,7 +35,7 @@ class DatabaseCreate(FormView):
 		form.create_database()
 		return super(DatabaseCreate, self).form_valid(form)
 
-
+@login_required
 def databaseUpdate(request, slug):
 	dbs = [db["name"] for db in list_databases()]
 	if(slug not in dbs):
@@ -44,8 +45,9 @@ def databaseUpdate(request, slug):
 		form.update_database(slug)
 		return redirect('mysql_database_list')
 	return render(request, 'mysql/database_password.html', {'form': form})
-	
-	
+
+
+@login_required
 def databaseDelete(request, slug):
 	dbs = [db["name"] for db in list_databases()]
 	if(slug not in dbs):

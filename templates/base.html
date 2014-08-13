@@ -68,16 +68,21 @@
 	</head>
 	<body>
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		  <div class="container-fluid">
-			<div class="navbar-header">
-			  <a class="navbar-brand" href="{% url 'status' %}">Kumquat</a>
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="{% url 'status' %}">Kumquat</a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav navbar-right">
+						{% if user.is_authenticated %}
+							<li><a href="{% url "django.contrib.auth.views.password_change" %}">{% trans "Logged in as" %} <strong>{{ user.username }}</strong></a></li>
+							<li><a href="{% url "django.contrib.auth.views.logout_then_login" %}">{% trans "Logout" %}</a></li>
+						{% else %}
+							<li><a href="{% url "django.contrib.auth.views.login" %}">{% trans "Login" %}</a></li>
+						{% endif %}
+					</ul>
+				</div>
 			</div>
-			<div class="navbar-collapse collapse">
-			  <ul class="nav navbar-nav navbar-right">
-				<li><a href="#">Login</a></li>
-			  </ul>
-			</div>
-		  </div>
 		</div>
 
 		<div class="container-fluid">

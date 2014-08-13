@@ -1,13 +1,14 @@
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from kumquat.utils import LoginRequiredMixin
 from models import Account
 from forms import AccountUpdateForm
 
-class AccountList(ListView):
+class AccountList(LoginRequiredMixin, ListView):
 	model = Account
 
-class AccountCreate(CreateView):
+class AccountCreate(LoginRequiredMixin, CreateView):
 	model = Account
 	success_url = reverse_lazy('ftp_account_list')
 	
@@ -19,7 +20,7 @@ class AccountCreate(CreateView):
 		return super(AccountCreate, self).form_valid(form)
 
 
-class AccountUpdate(UpdateView):
+class AccountUpdate(LoginRequiredMixin, UpdateView):
 	model = Account
 	form_class = AccountUpdateForm
 	success_url = reverse_lazy('ftp_account_list')
@@ -33,6 +34,6 @@ class AccountUpdate(UpdateView):
 		return super(AccountUpdate, self).form_valid(form)
 
 
-class AccountDelete(DeleteView):
+class AccountDelete(LoginRequiredMixin, DeleteView):
 	model = Account
 	success_url = reverse_lazy('ftp_account_list')

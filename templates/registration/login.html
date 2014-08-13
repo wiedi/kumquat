@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+<h1>{% trans "Login" %}</h1>
+
+<form action="" method="post" class="form-horizontal" role="form">
+ {% csrf_token %}
+ {% bootstrap_form form layout="horizontal" %}
+ {% buttons submit='Login' layout='horizontal' %}{% endbuttons %}
+</form>
+
+{% endblock %}

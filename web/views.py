@@ -3,25 +3,27 @@ from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from kumquat.utils import LoginRequiredMixin
 from models import VHost, SSLCert, DefaultVHost
 from forms import SSLCertForm
 
 # VHost
 
-class VHostList(ListView):
+class VHostList(LoginRequiredMixin, ListView):
 	model = VHost
 
-class VHostCreate(CreateView):
+class VHostCreate(LoginRequiredMixin, CreateView):
 	model = VHost
 	success_url = reverse_lazy('web_vhost_list')
 
-class VHostUpdate(UpdateView):
+class VHostUpdate(LoginRequiredMixin, UpdateView):
 	model = VHost
 	#form_class = AccountUpdateForm
 	fields = ['cert']
 	success_url = reverse_lazy('web_vhost_list')
 
-class VHostDelete(DeleteView):
+class VHostDelete(LoginRequiredMixin, DeleteView):
 	model = VHost
 	success_url = reverse_lazy('web_vhost_list')
 
@@ -29,12 +31,14 @@ class VHostDelete(DeleteView):
 # Default VHost
 
 @require_POST
+@login_required
 def vhostCatchallSet(request, pk):
 	v = get_object_or_404(VHost, pk = pk)
 	DefaultVHost(vhost = v, domain = v.domain).save()
 	return redirect('web_vhost_list')
 
 @require_POST
+@login_required
 def vhostCatchallDelete(request, pk):
 	get_object_or_404(DefaultVHost, pk = pk).delete()
 	return redirect('web_vhost_list')
@@ -42,9 +46,10 @@ def vhostCatchallDelete(request, pk):
 
 # SSL Certs
 
-class SSLCertList(ListView):
+class SSLCertList(LoginRequiredMixin, ListView):
 	model = SSLCert
 
+@login_required
 def sslcertCreate(request):
 	form = SSLCertForm(request.POST or None, request.FILES or None)
 	if form.is_valid():
@@ -54,6 +59,6 @@ def sslcertCreate(request):
 		return redirect('web_sslcert_list')
 	return render(request, 'web/sslcert_form.html', {'form': form})
 
-class SSLCertDelete(DeleteView):
+class SSLCertDelete(LoginRequiredMixin, DeleteView):
 	model = SSLCert
 	success_url = reverse_lazy('web_sslcert_list')
