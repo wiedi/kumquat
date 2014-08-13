@@ -39,6 +39,7 @@ INSTALLED_APPS = (
 	'mysql',
 	'ftp',
 	'status',
+	'mail',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -101,3 +102,4 @@ KUMQUAT_VHOST_GID     = 12
 KUMQUAT_USE_ZFS       = False
 KUMQUAT_VHOST_DATASET = 'zones/9183a8f7-dfe9-42a2-b2f3-647e698b916c/data/www'
 KUMQUAT_WEBSERVER_RELOAD = 'svcadm refresh apache'
+CORE_MAIL_TOKEN       = 'Soop6hoog6fohheagif8'

@@ -9,6 +9,7 @@ urlpatterns = patterns('',
 	url(r'^ftp/',    include('ftp.urls')),
 	url(r'^mysql/',  include('mysql.urls')),
 	url(r'^web/',    include('web.urls')),
+	url(r'^mail/',   include('mail.urls')),
 	url(r'^admin/', include(admin.site.urls)),
 
 #url(r'', include('registration.backends.default.urls')),

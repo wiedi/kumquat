@@ -8,7 +8,7 @@ default_length = 255
 class Account(models.Model):
 	name     = models.CharField(max_length=default_length, unique=True)
 	password = models.CharField(max_length=default_length)
-	domain   = models.ForeignKey(Domain)
+	domain   = models.ForeignKey(Domain, related_name='ftp_accounts')
 	path     = models.CharField(max_length=default_length, default="/")
 
 	def set_password(self, password):

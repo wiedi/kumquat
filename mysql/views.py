@@ -5,6 +5,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db import connections
+from django.http import Http404
 from kumquat.utils import LoginRequiredMixin
 from forms import *
 

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block content %}
+	<h1>{% trans "Mail Redirects" %}</h1>
+
+	<a href="{% url "mail_redirect_add" %}" class="btn btn-success pull-right">{% bootstrap_icon "plus" %} New</a>
+
+	<table class="table table-striped table-condensed table-hover">
+		<thead>
+		<tr>
+			<th>Name</th><th>To</th><th>&nbsp;</th>
+		</tr>
+		</thead>
+		{% for redirect in object_list %}
+		<tr>
+			<td><a href="{% url "mail_redirect_update" redirect.id %}">{{ redirect.name }}@{{ redirect.domain }}</a></td>
+			<td>{{ redirect.to }}</td>
+			<td>
+				<form action="{% url "mail_redirect_delete" redirect.id %}" method="post">
+					{% csrf_token %}
+					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>
+				</form>
+			</td>
+		</tr>
+	    {% endfor %}
+	</table>
+{% endblock %}
