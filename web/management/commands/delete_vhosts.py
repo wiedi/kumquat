@@ -13,8 +13,9 @@ class Command(BaseCommand):
 		if settings.KUMQUAT_USE_ZFS:
 			for dir in os.listdir(settings.KUMQUAT_VHOST_ROOT):
 				ds = settings.KUMQUAT_VHOST_DATASET + '/' + vhost
-				delete_soon = check_output(['zfs', 'get', 'core:delete_soon', ds]).strip()
-				if delete_soon:
+				delete_soon = check_output(['zfs', 'get', '-Hp', 'core:delete_soon', ds]).strip().split()
+				if len(delete_soon) != 4: continue
+				if delete_soon[2] == '1':
 					call(['zfs', 'destroy', ds])
 		else:
 			trash = settings.KUMQUAT_VHOST_ROOT + '/.Trash/'
