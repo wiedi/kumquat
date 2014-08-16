@@ -6,12 +6,6 @@ import json
 import socket
 
 
-def mdata(name):
-		try:
-			return check_output(["mdata-get", name])
-		except:
-			return ''
-
 def meminfo():
 		try:
 			out = check_output(["kstat", "-p", "memory_cap:*:*:"]).strip()
