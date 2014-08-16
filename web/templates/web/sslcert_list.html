@@ -25,7 +25,7 @@
 			<td>{{ cert.valid_not_before }}</td>
 			<td>{{ cert.valid_not_after }}</td>
 			<td>
-				<form action="{% url "web_sslcert_delete" cert.pk %}" method="post">
+				<form action="{% url "web_sslcert_delete" cert.pk %}" method="post" class="confirm-delete">
 					{% csrf_token %}
 					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>
 				</form>

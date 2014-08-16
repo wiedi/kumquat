@@ -18,7 +18,7 @@
 			<td><a href="{% url "mysql_database_update" database.name %}">{{ database.name }}</a></td>
 			<td>{{ database.database }}</td>
 			<td>
-				<form action="{% url "mysql_database_delete" database.name %}" method="post">
+				<form action="{% url "mysql_database_delete" database.name %}" method="post" class="confirm-delete">
 					{% csrf_token %}
 					<input type="hidden" name="name" value="{{ database.name }}">
 					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>

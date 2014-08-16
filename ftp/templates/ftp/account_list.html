@@ -19,7 +19,7 @@
 			<td>{{ account.vhost }}</td>
 			<td>{{ account.path }}</td>
 			<td>
-				<form action="{% url "ftp_account_delete" account.id %}" method="post">
+				<form action="{% url "ftp_account_delete" account.id %}" method="post" class="confirm-delete">
 					{% csrf_token %}
 					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>
 				</form>
