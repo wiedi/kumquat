@@ -5,6 +5,8 @@
 {% block content %}
 	<h1>{% trans "Mail Accounts" %}</h1>
 
+	{% bootstrap_messages %}
+
 	<a href="{% url "mail_account_add" %}" class="btn btn-success pull-right">{% bootstrap_icon "plus" %} New</a>
 
 	<table class="table table-striped table-condensed table-hover">
