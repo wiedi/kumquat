@@ -6,12 +6,6 @@ import json
 import socket
 
 
-def mdata(name):
-		try:
-			return check_output(["mdata-get", name])
-		except:
-			return ''
-
 def meminfo():
 		try:
 			out = check_output(["kstat", "-p", "memory_cap:*:*:"]).strip()
@@ -65,7 +59,6 @@ def info():
 				'live_image': sys.get('Live Image', ''),
 
 				'hostname':        socket.gethostname(),
-				'datacenter_name': mdata('sdc:datacenter_name'),
 
 				'image':      img.get('Image'),
 				'base_image': img.get('Base Image', '').replace(' ', '-'),
