@@ -17,7 +17,7 @@
 		<tr>
 			<td><a href="{% url "mail_account_update" account.id %}">{{ account }}</a></td>
 			<td>
-				<form action="{% url "mail_account_delete" account.id %}" method="post">
+				<form action="{% url "mail_account_delete" account.id %}" method="post" class="confirm-delete">
 					{% csrf_token %}
 					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>
 				</form>

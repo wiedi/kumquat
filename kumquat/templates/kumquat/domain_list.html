@@ -17,7 +17,7 @@
 		<tr>
 			<td>{{ domain.name }}</td>
 			<td>
-				<form action="{% url "domain_delete" domain.id %}" method="post">
+				<form action="{% url "domain_delete" domain.id %}" method="post" class="confirm-delete">
 					{% csrf_token %}
 					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>
 				</form>
