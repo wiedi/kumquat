@@ -5,6 +5,8 @@
 {% block content %}
 	<h1>{% trans "SSL Certificates" %}</h1>
 
+	{% bootstrap_messages %}
+
 	<a href="{% url "web_sslcert_add" %}" class="btn btn-success pull-right">{% bootstrap_icon "plus" %} New</a>
 
 	{% if object_list %}

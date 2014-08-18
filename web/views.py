@@ -4,6 +4,9 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import ugettext as _
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
 from kumquat.utils import LoginRequiredMixin
 from models import VHost, SSLCert, DefaultVHost
 from forms import SSLCertForm
@@ -13,9 +16,10 @@ from forms import SSLCertForm
 class VHostList(LoginRequiredMixin, ListView):
 	model = VHost
 
-class VHostCreate(LoginRequiredMixin, CreateView):
+class VHostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 	model = VHost
 	success_url = reverse_lazy('web_vhost_list')
+	success_message = _("%(name)s was created successfully")
 
 class VHostUpdate(LoginRequiredMixin, UpdateView):
 	model = VHost
@@ -56,6 +60,7 @@ def sslcertCreate(request):
 		c = SSLCert()
 		c.set_cert(request.FILES['cert'].read(), request.FILES['key'].read(), request.FILES['ca'].read())
 		c.save()
+		messages.success(request, _("Successfull added"))
 		return redirect('web_sslcert_list')
 	return render(request, 'web/sslcert_form.html', {'form': form})
 

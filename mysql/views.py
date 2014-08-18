@@ -4,6 +4,8 @@ from django.views.generic.edit import FormView
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import ugettext as _
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db import connections
 from django.http import Http404
 from kumquat.utils import LoginRequiredMixin
@@ -27,10 +29,11 @@ class DatabaseList(LoginRequiredMixin, ListView):
 	template_name = 'mysql/database_list.html'
 	get_queryset  = list_databases
 
-class DatabaseCreate(LoginRequiredMixin, FormView):
-	template_name = 'mysql/database_form.html'
-	success_url   = reverse_lazy('mysql_database_list')
-	form_class    = DatabaseCreateForm
+class DatabaseCreate(LoginRequiredMixin, SuccessMessageMixin, FormView):
+	template_name   = 'mysql/database_form.html'
+	success_url     = reverse_lazy('mysql_database_list')
+	success_message = _("%(name)s was created successfully")
+	form_class      = DatabaseCreateForm
 
 	def form_valid(self, form):
 		form.create_database()
