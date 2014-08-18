@@ -3,6 +3,8 @@ from django.core.exceptions import PermissionDenied
 from django.conf import settings
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.utils.translation import ugettext as _
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
 from kumquat.utils import LoginRequiredMixin
 from kumquat.models import Domain
@@ -15,9 +17,10 @@ import json
 class AccountList(LoginRequiredMixin, ListView):
 	model = Account
 
-class AccountCreate(LoginRequiredMixin, CreateView):
+class AccountCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 	model = Account
 	success_url = reverse_lazy('mail_account_list')
+	success_message = _("%(name)s was created successfully")
 	
 	def form_valid(self, form):
 		password = form.cleaned_data.get('password')
@@ -53,6 +56,7 @@ class RedirectList(LoginRequiredMixin, ListView):
 class RedirectCreate(LoginRequiredMixin, CreateView):
 	model = Redirect
 	success_url = reverse_lazy('mail_redirect_list')
+	success_message = _("%(name)s was created successfully")
 
 class RedirectUpdate(LoginRequiredMixin, UpdateView):
 	model = Redirect

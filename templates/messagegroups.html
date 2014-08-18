@@ -1,0 +1,8 @@
+{% if messages %}
+	{% for key, values in messages.items %}
+		<div class="alert alert-{{ key.1 }} fade in">
+			 <button type="button" class="close" data-dismiss="alert">×</button>
+			{{ values|join:"<br>" }}
+		</div>
+	{% endfor %}
+{% endif %}

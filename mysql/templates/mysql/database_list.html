@@ -5,6 +5,8 @@
 {% block content %}
 	<h1>{% trans "Databases" %}</h1>
 
+	{% bootstrap_messages %}
+
 	<a href="{% url "mysql_database_add" %}" class="btn btn-success pull-right">{% bootstrap_icon "plus" %} New</a>
 
 	<table class="table table-striped table-condensed table-hover">
