@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
 	def handle(self, *args, **options):
 		if settings.KUMQUAT_USE_ZFS:
-			for dir in os.listdir(settings.KUMQUAT_VHOST_ROOT):
+			for vhost in os.listdir(settings.KUMQUAT_VHOST_ROOT):
 				ds = settings.KUMQUAT_VHOST_DATASET + '/' + vhost
 				delete_soon = check_output(['zfs', 'get', '-Hp', 'core:delete_soon', ds]).strip().split()
 				if len(delete_soon) != 4: continue
