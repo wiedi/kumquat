@@ -38,7 +38,8 @@ class DatabaseCreateForm(forms.Form):
 			# clear possible previous permissions
 			c.execute("GRANT USAGE ON *.* TO %s", [name])
 			c.execute("DROP USER %s", [name])
-			c.execute("GRANT ALL ON " + database + ".* TO %s IDENTIFIED BY %s", [name, password])
+			c.execute("GRANT ALL ON " + database + ".* TO %s@'%' IDENTIFIED BY %s", [name, password])
+			c.execute("GRANT ALL ON " + database + ".* TO %s@localhost IDENTIFIED BY %s", [name, password])
 
 class DatabaseUpdateForm(forms.Form):
 	new_password = forms.CharField(widget=forms.widgets.PasswordInput, label = _("Password"))
@@ -46,5 +47,6 @@ class DatabaseUpdateForm(forms.Form):
 	def update_database(self, name):
 		password = self.cleaned_data.get("new_password")
 		c = connections['kumquat_mysql'].cursor()
-		c.execute("set password for %s = PASSWORD(%s)", (name, password))
-		
+		c.execute("set password for %s@'%%' = PASSWORD(%s)", (name, password))
+		c.execute("set password for %s@'localhost' = PASSWORD(%s)", (name, password))
+

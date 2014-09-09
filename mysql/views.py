@@ -61,6 +61,7 @@ def databaseDelete(request, slug):
 		
 	database = dbname(slug)
 	c = connections['kumquat_mysql'].cursor()
-	c.execute("drop user " + slug)
+	c.execute("drop user " + slug + "@'%'")
+	c.execute("drop user " + slug + "@localhost")
 	c.execute("drop database " + database)
 	return redirect('mysql_database_list')
