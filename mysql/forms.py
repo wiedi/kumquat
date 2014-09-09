@@ -38,7 +38,7 @@ class DatabaseCreateForm(forms.Form):
 			# clear possible previous permissions
 			c.execute("GRANT USAGE ON *.* TO %s", [name])
 			c.execute("DROP USER %s", [name])
-			c.execute("GRANT ALL ON " + database + ".* TO %s@'%' IDENTIFIED BY %s", [name, password])
+			c.execute("GRANT ALL ON " + database + ".* TO %s@'%%' IDENTIFIED BY %s", [name, password])
 			c.execute("GRANT ALL ON " + database + ".* TO %s@localhost IDENTIFIED BY %s", [name, password])
 
 class DatabaseUpdateForm(forms.Form):
