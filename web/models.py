@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 from OpenSSL import SSL, crypto
 from x509 import parseAsn1Generalizedtime, x509name_to_str, serial_to_hex
 from kumquat.models import Domain
@@ -9,7 +10,7 @@ import re
 default_length = 255
 
 class VHost(models.Model):
-	name   = models.CharField(max_length=default_length, validators=[DomainNameValidator()])
+	name   = models.CharField(max_length=default_length, verbose_name=_('Sub Domain'), help_text=_('Child part of your domain that is used to organize your site content.'), validators=[DomainNameValidator()])
 	domain = models.ForeignKey(Domain, blank=False)
 	cert   = models.ForeignKey('SSLCert', blank=True, null=True, on_delete=models.SET_NULL, verbose_name='SSL Certificate')
 
