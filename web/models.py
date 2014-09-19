@@ -3,12 +3,13 @@ from django.conf import settings
 from OpenSSL import SSL, crypto
 from x509 import parseAsn1Generalizedtime, x509name_to_str, serial_to_hex
 from kumquat.models import Domain
+from kumquat.utils import DomainNameValidator
 import re
 
 default_length = 255
 
 class VHost(models.Model):
-	name   = models.CharField(max_length=default_length)
+	name   = models.CharField(max_length=default_length, validators=[DomainNameValidator()])
 	domain = models.ForeignKey(Domain, blank=False)
 	cert   = models.ForeignKey('SSLCert', blank=True, null=True, on_delete=models.SET_NULL, verbose_name='SSL Certificate')
 
