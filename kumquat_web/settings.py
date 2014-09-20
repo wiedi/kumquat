@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
+import sys, os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -93,6 +93,56 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 LOGIN_REDIRECT_URL = '/'
+
+# Logging
+# https://docs.djangoproject.com/en/dev/topics/logging/
+LOGGING = {
+	'version': 1,
+	'disable_existing_loggers': False,
+	'filters': {
+		# Only use logging if debug is false and it's a production environment
+		'require_debug_false': {
+			'()': 'django.utils.log.RequireDebugFalse'
+		}
+	},
+	'formatters': {
+		'verbose': {
+			'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+			'datefmt': '%Y-%m-%dT%H:%M:%S',
+		},
+		'simple': {
+			'format': '%(levelname)s %(message)s'
+			'datefmt': '%Y-%m-%dT%H:%M:%S',
+		},
+	},
+	'handlers': {
+		# Log to a text file that can be rotated by logrotate
+		'logfile': {
+			'class': 'logging.handlers.WatchedFileHandler',
+			'filename': '/var/log/django/kumquat.log',
+		},
+		# Log to stdout
+		'console': {
+			'class':'logging.StreamHandler',
+			'stream': sys.stdout,
+		},
+		# Log to syslog because this is much cleaner than extra file
+		'syslog': {
+			'class': 'logging.handlers.SysLogHandler',
+			'facility': 'local1',
+			'address': ('127.0.0.1', 514),
+			'formatter': 'simple',
+		},
+	},
+	'loggers': {
+		# Might as well log any errors anywhere else in Django
+		'django': {
+			'handlers': ['console', 'syslog'],
+			'level': 'ERROR',
+			'propagate': False,
+		},
+	},
+}
 
 # kumquat
 
