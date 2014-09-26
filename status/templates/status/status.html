@@ -35,7 +35,7 @@
 		<th>Disk</th>
 		<td>
 			<div class="progress">
-			  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{info.disk.use}}%;">
+			  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{info.disk.use}}%; min-width: 110px">
 			    {{info.disk.used|filesizeformat}} / {{info.disk.size|filesizeformat}}
 			  </div>
 			</div>
@@ -47,7 +47,7 @@
 		<th>RAM</th>
 		<td>
 			<div class="progress">
-			  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{info.mem.mem_use}}%;">
+			  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{info.mem.mem_use}}%; min-width: 110px">
 			    {{info.mem.mem_used|filesizeformat}} / {{info.mem.mem_cap|filesizeformat}}
 			  </div>
 			</div>
@@ -58,7 +58,7 @@
 		<th>Swap</th>
 		<td>
 			<div class="progress">
-			  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{info.mem.swap_use}}%;">
+			  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{info.mem.swap_use}}%; min-width: 110px">
 			    {{info.mem.swap_used|filesizeformat}} / {{info.mem.swap_cap|filesizeformat}}
 			  </div>
 			</div>
