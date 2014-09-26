@@ -116,11 +116,6 @@ LOGGING = {
 		},
 	},
 	'handlers': {
-		# Log to a text file that can be rotated by logrotate
-		'logfile': {
-			'class': 'logging.handlers.WatchedFileHandler',
-			'filename': '/var/log/django/kumquat.log',
-		},
 		# Log to stdout
 		'console': {
 			'class':'logging.StreamHandler',
