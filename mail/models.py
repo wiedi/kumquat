@@ -17,7 +17,7 @@ class Account(models.Model):
 		return unicode(self.name) + '@' + unicode(self.domain)
 	
 	class Meta:
-		unique_together = ('name', 'domain')
+		unique_together = (('name', 'domain'),)
 
 
 class Redirect(models.Model):
@@ -26,7 +26,7 @@ class Redirect(models.Model):
 	to     = models.CharField(max_length=default_length)
 
 	class Meta:
-		unique_together = ('name', 'domain')
+		unique_together = (('name', 'domain'),)
 
 	def __unicode__(self):
 		return self.name + '@' + unicode(self.domain) + ' -> ' + self.to
