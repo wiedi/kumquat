@@ -5,13 +5,14 @@ from django.utils.translation import ugettext as _
 from django.contrib.messages.views import SuccessMessageMixin
 from kumquat.utils import LoginRequiredMixin
 from models import Account
-from forms import AccountUpdateForm
+from forms import AccountUpdateForm, AccountCreateForm
 
 class AccountList(LoginRequiredMixin, ListView):
 	model = Account
 
 class AccountCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 	model = Account
+	form_class = AccountCreateForm
 	success_url = reverse_lazy('ftp_account_list')
 	success_message = _("%(name)s was created successfully")
 	
