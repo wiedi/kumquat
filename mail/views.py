@@ -9,7 +9,7 @@ from django.http import HttpResponse
 from kumquat.utils import LoginRequiredMixin
 from kumquat.models import Domain
 from models import Account, Redirect
-from forms import AccountUpdateForm
+from forms import AccountUpdateForm, AccountCreateForm
 import json
 
 # Accounts
@@ -19,6 +19,7 @@ class AccountList(LoginRequiredMixin, ListView):
 
 class AccountCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 	model = Account
+	form_class = AccountCreateForm
 	success_url = reverse_lazy('mail_account_list')
 	success_message = _("%(name)s was created successfully")
 	
