@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
+from django.db.models import Count
 from django.template.loader import render_to_string
 from django.conf import settings
 from web.models import SSLCert, VHost
@@ -11,7 +12,7 @@ def write_certs():
 
 def write_vhost_config():
 	config = ''
-	for vhost in VHost.objects.all():
+	for vhost in VHost.objects.all().annotate(is_defaultvhost=Count('defaultvhost')).order_by('is_defaultvhost'):
 		context = {
 			'vhost': vhost,
 		}
