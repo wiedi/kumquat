@@ -150,3 +150,6 @@ KUMQUAT_USE_ZFS       = False
 KUMQUAT_VHOST_DATASET = 'zones/9183a8f7-dfe9-42a2-b2f3-647e698b916c/data/www'
 KUMQUAT_WEBSERVER_RELOAD = 'svcadm refresh apache'
 CORE_MAIL_TOKEN       = 'Soop6hoog6fohheagif8'
+# valid whitelist values are described at https://mail.core.io/api/
+# set this to None (or leave it undefined) to whitelist the same domain as the account
+#CORE_MAIL_WHITELIST   = "*"

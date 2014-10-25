@@ -82,9 +82,13 @@ def export(request):
 			"alias":   [],
 		}
 		for account in domain.mail_accounts.all():
+			spoofing_whitelist = getattr(settings, 'CORE_MAIL_WHITELIST', None)
+			if spoofing_whitelist == None:
+				spoofing_whitelist = unicode(domain)
 			data[unicode(domain)]["account"] += [{
-				"name":     account.name,
-				"password": account.password,
+				"name":               account.name,
+				"password":           account.password,
+				"spoofing_whitelist": spoofing_whitelist,
 			}]
 		for redirect in domain.redirect_set.all():
 			data[unicode(domain)]["alias"] += [{
