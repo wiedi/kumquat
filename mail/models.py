@@ -9,7 +9,7 @@ class Account(models.Model):
 	name       = models.CharField(max_length=default_length)
 	domain     = models.ForeignKey(Domain, related_name='mail_accounts')
 	password   = models.CharField(max_length=default_length)
-	subaddress = models.BooleanField(verbose_name=_('Subaddress extension'), help_text=_('Enable subaddress extension (e.g. primary+sub@example.com'))
+	subaddress = models.BooleanField(verbose_name=_('Subaddress extension'), help_text=_('Enable subaddress extension (e.g. primary+sub@example.com'), default=False)
 
 	def set_password(self, password):
 		self.password = sha512_crypt.encrypt(password)
