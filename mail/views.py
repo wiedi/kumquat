@@ -89,6 +89,7 @@ def export(request):
 				"name":               account.name,
 				"password":           account.password,
 				"spoofing_whitelist": spoofing_whitelist,
+				"subaddress_extension": account.subaddress,
 			}]
 		for redirect in domain.redirect_set.all():
 			data[unicode(domain)]["alias"] += [{
