@@ -86,9 +86,10 @@ def export(request):
 			if spoofing_whitelist == None:
 				spoofing_whitelist = unicode(domain)
 			data[unicode(domain)]["account"] += [{
-				"name":               account.name,
-				"password":           account.password,
-				"spoofing_whitelist": spoofing_whitelist,
+				"name":                 account.name,
+				"password":             account.password,
+				"spoofing_whitelist":   spoofing_whitelist,
+				"subaddress_extension": account.subaddress,
 			}]
 		for redirect in domain.redirect_set.all():
 			data[unicode(domain)]["alias"] += [{
