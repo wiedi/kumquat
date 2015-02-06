@@ -1,8 +1,10 @@
 from django import forms
 from models import Account
+from web.models import VHost
 
 class AccountCreateForm(forms.ModelForm):
 	password = forms.CharField(widget=forms.widgets.PasswordInput)
+	vhost    = forms.ModelChoiceField(queryset=VHost.objects.all(), empty_label="/")
 	class Meta:
 		model = Account
 
