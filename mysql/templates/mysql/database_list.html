@@ -18,7 +18,11 @@
 		{% for database in object_list %}
 		<tr>
 			<td><a href="{% url "mysql_database_update" database.name %}">{{ database.name }}</a></td>
+			{% if settings.KUMQUAT_PHPMYADMIN_URL %}
+			<td><a href="{{ settings.KUMQUAT_PHPMYADMIN_URL }}/db_structure.php?db={{ database.database }}">{{ database.database }}</a></td>
+			{% else %}
 			<td>{{ database.database }}</td>
+			{% endif %}
 			<td>
 				<form action="{% url "mysql_database_delete" database.name %}" method="post" class="confirm-delete">
 					{% csrf_token %}
