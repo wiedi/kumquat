@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import sys, os
+from django.conf import global_settings
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -57,7 +58,9 @@ WSGI_APPLICATION = 'kumquat_web.wsgi.application'
 
 TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
 
-
+TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+	'django_settings_export.settings_export',
+)
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
@@ -73,7 +76,7 @@ DATABASES = {
 		'USER':     'root',
 		'PASSWORD': 'qwe123',
 	}
-	
+
 }
 
 # Internationalization
@@ -149,7 +152,15 @@ KUMQUAT_VHOST_GID     = 12
 KUMQUAT_USE_ZFS       = False
 KUMQUAT_VHOST_DATASET = 'zones/9183a8f7-dfe9-42a2-b2f3-647e698b916c/data/www'
 KUMQUAT_WEBSERVER_RELOAD = 'svcadm refresh apache'
-CORE_MAIL_TOKEN       = 'Soop6hoog6fohheagif8'
+KUMQUAT_WEBMAIL_URL    = ''
+KUMQUAT_PHPMYADMIN_URL = ''
+CORE_MAIL_TOKEN        = 'Soop6hoog6fohheagif8'
 # valid whitelist values are described at https://mail.core.io/api/
 # set this to None (or leave it undefined) to whitelist the same domain as the account
 #CORE_MAIL_WHITELIST   = "*"
+
+# Allow the following variables in the template
+SETTINGS_EXPORT = [
+	'KUMQUAT_WEBMAIL_URL',
+	'KUMQUAT_PHPMYADMIN_URL',
+]
