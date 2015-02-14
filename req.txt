@@ -1,6 +1,7 @@
 Django==1.6.5
 django-bootstrap3==4.8.2
 django-messagegroups==0.4.1
+django-settings-export==1.0.3
 passlib==1.6.2
 MySQL-python==1.2.5
 pyOpenSSL==0.14
