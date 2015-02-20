@@ -13,7 +13,7 @@ class LoginRequiredMixin(object):
 class DomainNameValidator(RegexValidator):
 	# from URLValidator + there can be most 127 labels (at most 255 total chars)
 	regex = re.compile(
-		r'^(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.){0,126}(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?))$',
+		r'^(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.){0,126}(?:[A-Z]{1,6}\.?|[A-Z0-9-]{2,}\.?))$',
 		re.IGNORECASE
 		)
 	message = 'Enter a valid domain name value'
