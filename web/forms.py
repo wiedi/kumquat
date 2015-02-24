@@ -30,3 +30,7 @@ class SSLCertForm(forms.Form):
 			raise forms.ValidationError(_("Please upload a matching key-pair in PEM format."))
 
 		return cleaned_data
+
+
+class SnapshotForm(forms.Form):
+	name     = forms.RegexField(max_length=16, regex=r'^[a-z0-9_-]+$', label = _("Name"))

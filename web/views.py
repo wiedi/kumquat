@@ -7,9 +7,12 @@ from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
+from django.conf import settings
+from datetime import datetime
 from kumquat.utils import LoginRequiredMixin
 from models import VHost, SSLCert, DefaultVHost
-from forms import SSLCertForm
+from forms import SSLCertForm, SnapshotForm
+import zerorpc
 
 # VHost
 
@@ -67,3 +70,47 @@ def sslcertCreate(request):
 class SSLCertDelete(LoginRequiredMixin, DeleteView):
 	model = SSLCert
 	success_url = reverse_lazy('web_sslcert_list')
+
+# Snapshots
+
+@login_required
+def vhostSnapshotList(request, pk):
+	v = get_object_or_404(VHost, pk = pk)
+	z = zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET)
+	snapshots = z.snapshot_list(v.pk)
+	for i, s in enumerate(snapshots):
+		snapshots[i]['creation'] = datetime.fromtimestamp(snapshots[i]['creation'])
+
+	return render(request, 'web/snapshot_list.html', {'vhost': v, 'object_list': snapshots})
+
+
+@login_required
+def vhostSnapshotCreate(request, pk):
+	v = get_object_or_404(VHost, pk = pk)
+	form = SnapshotForm(request.POST or None)
+	if form.is_valid():
+		z = zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET)
+		if z.snapshot_create(v.pk, form.cleaned_data.get("name")):
+			messages.success(request, _("Snapshot created"))
+		else:
+			messages.error(request, _("Snapshot not created"))
+		return redirect('web_vhost_snapshot_list', pk)
+	return render(request, 'web/snapshot_form.html', {'form': form})
+
+
+@require_POST
+@login_required
+def vhostSnapshotRollback(request, pk, name):
+	v = get_object_or_404(VHost, pk = pk)
+	z = zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET)
+	z.snapshot_rollback(v.pk, name)
+	return redirect('web_vhost_snapshot_list', pk)
+
+
+@require_POST
+@login_required
+def vhostSnapshotDelete(request, pk, name):
+	v = get_object_or_404(VHost, pk = pk)
+	z = zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET)
+	z.snapshot_delete(v.pk, name)
+	return redirect('web_vhost_snapshot_list', pk)

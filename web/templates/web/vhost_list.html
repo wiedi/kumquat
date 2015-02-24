@@ -17,6 +17,7 @@
 			<th>{% trans "SSL" %}</th>
 			<th>{% trans "Catch-All" %}</th>
 			<th>&nbsp;</th>
+			<th>&nbsp;</th>
 		</tr>
 		</thead>
 		{% for vhost in object_list %}
@@ -36,6 +37,10 @@
 						{% csrf_token %}
 						<input type="submit" value="{% trans "Set Catch-All" %}" class="btn btn-xs btn-default"/>
 					</form>
+				{% endif %}
+			</t><td>
+				{% if settings.KUMQUAT_USE_ZFS %}
+				<a href="{% url "web_vhost_snapshot_list" vhost.pk %}" class="btn btn-xs btn-default">{% trans "Snapshots" %}</a>
 				{% endif %}
 			</t><td>
 				<form action="{% url "web_vhost_delete" vhost.pk %}" method="post" class="pull-left confirm-delete">

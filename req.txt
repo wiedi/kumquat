@@ -5,3 +5,4 @@ django-settings-export==1.0.3
 passlib==1.6.2
 MySQL-python==1.2.5
 pyOpenSSL==0.14
+zerorpc==0.4.4
