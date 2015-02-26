@@ -10,6 +10,26 @@ class LoginRequiredMixin(object):
 	def dispatch(self, request, *args, **kwargs):
 		return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
 
+class SuccessActionFormMixin(object):
+	def success_action(self):
+		pass
+
+	def form_valid(self, form):
+		ret = super(SuccessActionFormMixin, self).form_valid(form)
+		self.success_action()
+		return ret
+
+class SuccessActionDeleteMixin(object):
+	def success_action(self):
+		pass
+
+	def delete(self, request, *args, **kwargs):
+		ret = super(SuccessActionDeleteMixin, self).delete(request, *args, **kwargs)
+		# this is a lie, we can't be sure the delte was successful
+		self.success_action()
+		return ret
+
+
 class DomainNameValidator(RegexValidator):
 	# from URLValidator + there can be most 127 labels (at most 255 total chars)
 	regex = re.compile(

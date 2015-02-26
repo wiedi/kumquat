@@ -59,12 +59,16 @@ def update_filesystem():
 def reload_webserver():
 	call(settings.KUMQUAT_WEBSERVER_RELOAD, shell=True)
 
+def update_vhosts():
+		write_certs()
+		write_vhost_config()
+		update_filesystem()
+		reload_webserver()
+
+
 class Command(BaseCommand):
 	args = ''
 	help = 'generate new vhosts config, rehash webserver and create webroots'
 
 	def handle(self, *args, **options):
-		write_certs()
-		write_vhost_config()
-		update_filesystem()
-		reload_webserver()
+		update_vhosts()

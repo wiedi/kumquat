@@ -9,31 +9,35 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.conf import settings
 from datetime import datetime
-from kumquat.utils import LoginRequiredMixin
+from kumquat.utils import LoginRequiredMixin, SuccessActionFormMixin, SuccessActionDeleteMixin
 from models import VHost, SSLCert, DefaultVHost
 from forms import SSLCertForm, SnapshotForm
 import zerorpc
+
+def update_vhosts(*args, **kwargs):
+	zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET).update_vhosts()
 
 # VHost
 
 class VHostList(LoginRequiredMixin, ListView):
 	model = VHost
 
-class VHostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class VHostCreate(LoginRequiredMixin, SuccessMessageMixin, SuccessActionFormMixin, CreateView):
 	model = VHost
 	success_url = reverse_lazy('web_vhost_list')
 	success_message = _("%(name)s was created successfully")
+	success_action = update_vhosts
 
-class VHostUpdate(LoginRequiredMixin, UpdateView):
+class VHostUpdate(LoginRequiredMixin, SuccessActionFormMixin, UpdateView):
 	model = VHost
-	#form_class = AccountUpdateForm
 	fields = ['cert']
 	success_url = reverse_lazy('web_vhost_list')
+	success_action = update_vhosts
 
-class VHostDelete(LoginRequiredMixin, DeleteView):
+class VHostDelete(LoginRequiredMixin, SuccessActionDeleteMixin, DeleteView):
 	model = VHost
 	success_url = reverse_lazy('web_vhost_list')
-
+	success_action = update_vhosts
 
 # Default VHost
 
@@ -42,12 +46,14 @@ class VHostDelete(LoginRequiredMixin, DeleteView):
 def vhostCatchallSet(request, pk):
 	v = get_object_or_404(VHost, pk = pk)
 	DefaultVHost(vhost = v, domain = v.domain).save()
+	update_vhosts()
 	return redirect('web_vhost_list')
 
 @require_POST
 @login_required
 def vhostCatchallDelete(request, pk):
 	get_object_or_404(DefaultVHost, pk = pk).delete()
+	update_vhosts()
 	return redirect('web_vhost_list')
 
 
@@ -70,6 +76,7 @@ def sslcertCreate(request):
 class SSLCertDelete(LoginRequiredMixin, DeleteView):
 	model = SSLCert
 	success_url = reverse_lazy('web_sslcert_list')
+
 
 # Snapshots
 

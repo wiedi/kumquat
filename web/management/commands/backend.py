@@ -1,17 +1,23 @@
 import os
 import re
 import shutil
-import zerorpc
 from subprocess import call, check_output
+from gevent import monkey, lock, spawn; monkey.patch_all()
+import zerorpc
 from django.core.management.base import BaseCommand, CommandError
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 from web.models import VHost, SSLCert, DefaultVHost
+from update_vhosts import update_vhosts
 
+update_lock = lock.RLock()
+def locked_update_vhosts():
+	with update_lock:
+		update_vhosts()
 
 class Backend(object):
 	def update_vhosts(self):
-		pass
+		spawn(locked_update_vhosts)
 	
 	def snapshot_list(self, vhost):
 		if not settings.KUMQUAT_USE_ZFS:
