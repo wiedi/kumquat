@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from web.models import SSLCert, VHost
 from subprocess import call
+import uuid
 import os
 
 def write_certs():
@@ -27,6 +28,9 @@ def write_vhost_config():
 def webroot(vhost):
 	return settings.KUMQUAT_VHOST_ROOT + '/' + vhost
 
+def webroot_dataset(vhost):
+	return settings.KUMQUAT_VHOST_DATASET + '/' + vhost
+
 def update_filesystem():
 	dirs   = set(os.listdir(settings.KUMQUAT_VHOST_ROOT)) - set(['.Trash'])
 	vhosts = set([str(vhost) for vhost in VHost.objects.all()])
@@ -36,12 +40,7 @@ def update_filesystem():
 	
 	for vhost in create:
 		if settings.KUMQUAT_USE_ZFS:
-			ds = settings.KUMQUAT_VHOST_DATASET + '/' + vhost
-			try:
-				call(['zfs', 'create', ds])
-			except:
-				pass
-			call(['zfs', 'set', 'core:delete_soon=0', ds])
+			call(['zfs', 'create', webroot_dataset(vhost)])
 		else:
 			os.makedirs(webroot(vhost))
 		os.makedirs(webroot(vhost) + '/htdocs')
@@ -50,10 +49,11 @@ def update_filesystem():
 			os.chown(p, settings.KUMQUAT_VHOST_UID, settings.KUMQUAT_VHOST_GID)
 
 	for vhost in remove:
+		deleted_name_suffix = settings.KUMQUAT_VHOST_ROOT + '/.Trash/' + vhost + '-' + uuid.uuid4()
 		if settings.KUMQUAT_USE_ZFS:
-			call(['zfs', 'set', 'core:delete_soon=1', settings.KUMQUAT_VHOST_DATASET + '/' + vhost])
+			call(['zfs', 'rename', '-p', webroot_dataset(vhost), settings.KUMQUAT_VHOST_DATASET + deleted_name_suffix])
 		else:
-			os.rename(webroot(vhost), settings.KUMQUAT_VHOST_ROOT + '/.Trash/' + vhost)
+			os.rename(webroot(vhost), settings.KUMQUAT_VHOST_ROOT + deleted_name_suffix)
 
 
 def reload_webserver():
