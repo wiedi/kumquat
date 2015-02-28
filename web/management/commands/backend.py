@@ -32,7 +32,9 @@ class Backend(object):
 		except:
 			return []
 		for snap in out.strip().split("\n"):
-			name, creation, user_created = snap.split()
+			s = snap.split()
+			if len(s) != 3: continue
+			name, creation, user_created = s
 			snapshots += [{
 				'name':         name.split('@')[1],
 				'creation':     int(creation),
