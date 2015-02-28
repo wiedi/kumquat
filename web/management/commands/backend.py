@@ -86,6 +86,7 @@ class Command(BaseCommand):
 	help = 'run backend service'
 
 	def handle(self, *args, **options):
+		os.umask(0007)
 		s = zerorpc.Server(Backend())
 		s.bind(settings.KUMQUAT_BACKEND_SOCKET)
 		s.run()
