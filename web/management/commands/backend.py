@@ -2,7 +2,8 @@ import os
 import re
 import shutil
 from subprocess import call, check_output
-from gevent import monkey, lock, spawn; monkey.patch_all()
+from gevent import monkey, lock, spawn
+monkey.patch_all(socket=True, dns=True, time=True, select=True, thread=False, os=True, ssl=True, httplib=False, aggressive=True)
 import zerorpc
 from django.core.management.base import BaseCommand, CommandError
 from django.shortcuts import get_object_or_404
