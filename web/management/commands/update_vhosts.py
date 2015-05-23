@@ -49,7 +49,7 @@ def update_filesystem():
 			os.chown(p, settings.KUMQUAT_VHOST_UID, settings.KUMQUAT_VHOST_GID)
 
 	for vhost in remove:
-		deleted_name_suffix = settings.KUMQUAT_VHOST_ROOT + '/.Trash/' + vhost + '-' + uuid.uuid4()
+		deleted_name_suffix = '/.Trash/' + vhost + '-' + str(uuid.uuid4())
 		if settings.KUMQUAT_USE_ZFS:
 			call(['zfs', 'rename', '-p', webroot_dataset(vhost), settings.KUMQUAT_VHOST_DATASET + deleted_name_suffix])
 		else:
