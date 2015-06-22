@@ -77,22 +77,23 @@ def export(request):
 	
 	data = {}
 	for domain in Domain.objects.all():
-		data[unicode(domain)] = {
+		punycode_domain = unicode(domain.punycode())
+		data[punycode_domain] = {
 			"account": [],
 			"alias":   [],
 		}
 		for account in domain.mail_accounts.all():
 			spoofing_whitelist = getattr(settings, 'CORE_MAIL_WHITELIST', None)
 			if spoofing_whitelist == None:
-				spoofing_whitelist = unicode(domain)
-			data[unicode(domain)]["account"] += [{
+				spoofing_whitelist = punycode_domain
+			data[punycode_domain]["account"] += [{
 				"name":                 account.name,
 				"password":             account.password,
 				"spoofing_whitelist":   spoofing_whitelist,
 				"subaddress_extension": account.subaddress,
 			}]
 		for redirect in domain.redirect_set.all():
-			data[unicode(domain)]["alias"] += [{
+			data[punycode_domain]["alias"] += [{
 				"name": redirect.name,
 				"to":   redirect.to,
 			}]
