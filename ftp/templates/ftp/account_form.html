@@ -4,6 +4,7 @@
 
 {% block content %}
 	<h1>{% trans "FTP Account" %}</h1>
+	<p>{% trans "You should always use FTP with TLS or SSL support to protect your FTP account." %}</p>
 	<form method="post" class="form-horizontal" role="form">
 		{% csrf_token %}
 		{% bootstrap_form form layout='horizontal' %}
