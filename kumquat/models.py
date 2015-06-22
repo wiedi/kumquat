@@ -8,7 +8,7 @@ class Domain(models.Model):
 	def __unicode__(self):
 		return self.name.decode("idna")
 
-	def punnycode(self):
+	def punycode(self):
 		return self.name
 
 	def save(self, **kwargs):

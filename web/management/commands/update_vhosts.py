@@ -18,7 +18,7 @@ def write_vhost_config():
 			'vhost': vhost,
 		}
 		try:
-			config += render_to_string('web/vhost-' + str(vhost.punnycode()) + '.conf', context)
+			config += render_to_string('web/vhost-' + str(vhost.punycode()) + '.conf', context)
 		except:
 			config += render_to_string('web/vhost.conf', context)
 
@@ -33,7 +33,7 @@ def webroot_dataset(vhost):
 
 def update_filesystem():
 	dirs   = set(os.listdir(settings.KUMQUAT_VHOST_ROOT)) - set(['.Trash'])
-	vhosts = set([str(vhost.punnycode()) for vhost in VHost.objects.all()])
+	vhosts = set([str(vhost.punycode()) for vhost in VHost.objects.all()])
 
 	remove = dirs - vhosts
 	create = vhosts - dirs
