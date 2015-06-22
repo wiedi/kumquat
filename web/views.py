@@ -24,6 +24,7 @@ class VHostList(LoginRequiredMixin, ListView):
 
 class VHostCreate(LoginRequiredMixin, SuccessMessageMixin, SuccessActionFormMixin, CreateView):
 	model = VHost
+	fields = ('name', 'domain', 'cert')
 	success_url = reverse_lazy('web_vhost_list')
 	success_message = _("%(name)s was created successfully")
 	success_action = update_vhosts

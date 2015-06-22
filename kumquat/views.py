@@ -11,6 +11,7 @@ class DomainList(LoginRequiredMixin, ListView):
 
 class DomainCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Domain
+    fields = ('name',)
     success_url = reverse_lazy('domain_list')
     success_message = _("%(name)s was created successfully")
 

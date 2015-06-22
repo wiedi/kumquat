@@ -56,6 +56,7 @@ class RedirectList(LoginRequiredMixin, ListView):
 
 class RedirectCreate(LoginRequiredMixin, CreateView):
 	model = Redirect
+	fields = ('name', 'domain', 'to')
 	success_url = reverse_lazy('mail_redirect_list')
 	success_message = _("%(name)s was created successfully")
 
