@@ -15,10 +15,13 @@ class VHost(models.Model):
 	cert   = models.ForeignKey('SSLCert', blank=True, null=True, on_delete=models.SET_NULL, verbose_name='SSL Certificate')
 
 	def webroot(self):
-		return settings.KUMQUAT_VHOST_ROOT + '/' + str(self)
+		return settings.KUMQUAT_VHOST_ROOT + '/' + str(self.punnycode())
 
 	def __unicode__(self):
 		return unicode(self.name) + '.' + unicode(self.domain)
+
+	def punnycode(self):
+		return unicode(self.name) + '.' + unicode(self.domain.punnycode())
 
 	class Meta:
 		unique_together = (("name", "domain"),)
