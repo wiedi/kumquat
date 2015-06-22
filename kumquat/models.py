@@ -7,3 +7,7 @@ class Domain(models.Model):
 
 	def __unicode__(self):
 		return self.name
+
+	def save(self, **kwargs):
+		self.name = self.name.encode("idna")
+		super(Domain, self).save(**kwargs)
