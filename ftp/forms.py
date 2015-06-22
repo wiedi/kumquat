@@ -7,6 +7,7 @@ class AccountCreateForm(forms.ModelForm):
 	vhost    = forms.ModelChoiceField(queryset=VHost.objects.all(), empty_label="/")
 	class Meta:
 		model = Account
+		fields = ('name', 'password', 'vhost', 'path')
 
 
 class AccountUpdateForm(forms.ModelForm):
