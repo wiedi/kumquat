@@ -12,6 +12,7 @@ urlpatterns = patterns('',
 	url(r'^mysql/',  include('mysql.urls')),
 	url(r'^web/',    include('web.urls')),
 	url(r'^mail/',   include('mail.urls')),
+	url(r'^cron/',   include('cron.urls')),
 	url(r'^admin/', include(admin.site.urls)),
 
 	url(r'', include('django.contrib.auth.urls')),
