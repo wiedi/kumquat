@@ -22,8 +22,6 @@ def write_vhost_config():
 		except:
 			config += render_to_string('web/vhost.conf', context)
 
-	print(config)
-
 	with open(settings.KUMQUAT_VHOST_CONFIG, 'w') as f:
 		f.write(config)
 
