@@ -10,16 +10,24 @@ from django.shortcuts import get_object_or_404
 from django.conf import settings
 from web.models import VHost, SSLCert, DefaultVHost
 from update_vhosts import update_vhosts
+from update_cronjobs import update_cronjobs
 
 update_lock = lock.RLock()
 def locked_update_vhosts():
 	with update_lock:
 		update_vhosts()
 
+def locked_update_cronjobs():
+	with update_lock:
+		update_cronjobs()
+
 class Backend(object):
 	def update_vhosts(self):
 		spawn(locked_update_vhosts)
-	
+
+	def update_cronjobs(self):
+		spawn(locked_update_cronjobs)
+
 	def snapshot_list(self, vhost):
 		if not settings.KUMQUAT_USE_ZFS:
 			raise Exception("Snapshots only supported with ZFS")
