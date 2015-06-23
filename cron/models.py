@@ -8,7 +8,8 @@ WHEN = (
         ('0,30 * * * *', _('every 30 minutes')),
         ('0 * * * *', _('hourly')),
         ('0 0 * * *', _('daily')),
-        ('0 0 0 * *', _('weekly')),
+        ('0 0 * * 0', _('weekly')),
+        ('0 0 1 * *', _('monthly')),
 )
 
 class Cronjob(models.Model):
