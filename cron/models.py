@@ -17,4 +17,4 @@ class Cronjob(models.Model):
     command = models.CharField(verbose_name=_("Command"), max_length=1024, help_text=_("Posix shell command which will be exectured"))
 
     def __unicode__(self):
-        return self.when
+        return self.when + " " + self.command
