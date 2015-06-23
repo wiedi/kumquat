@@ -6,7 +6,8 @@ import subprocess
 
 def update_cronjobs():
     cronlist = ''
-    cron = subprocess.Popen(settings.KUMQUAT_CRONJOB_CMD, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    command  = settings.KUMQUAT_CRONJOB_CMD.split(' ')
+    cron = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     for cronjob in Cronjob.objects.all():
         cronlist += cronjob.when + " " + cronjob.command + "\n"
 
