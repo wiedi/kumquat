@@ -42,6 +42,7 @@ INSTALLED_APPS = (
 	'ftp',
 	'status',
 	'mail',
+	'cron',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -155,6 +156,7 @@ KUMQUAT_VHOST_DATASET    = 'zones/9764b9e4-7848-4af0-be52-131affa2bbcb/data/www'
 KUMQUAT_WEBSERVER_RELOAD = 'svcadm refresh apache'
 KUMQUAT_WEBMAIL_URL      = ''
 KUMQUAT_PHPMYADMIN_URL   = ''
+KUMQUAT_CRONJOB_CMD      = 'sudo -u www crontab'
 CORE_MAIL_TOKEN          = 'Soop6hoog6fohheagif8'
 # valid whitelist values are described at https://mail.core.io/api/
 # set this to None (or leave it undefined) to whitelist the same domain as the account
