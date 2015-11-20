@@ -1,5 +1,6 @@
 Django==1.8.2
 django-bootstrap3==5.4.0
+django-cronfield==0.2
 django-messagegroups==0.4.4
 django-settings-export==1.0.3
 passlib==1.6.2
