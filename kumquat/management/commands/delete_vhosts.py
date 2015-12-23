@@ -12,7 +12,7 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 		if settings.KUMQUAT_USE_ZFS:
 			for vhost in os.listdir(settings.KUMQUAT_VHOST_ROOT + '/.Trash/'):
-				call(['zfs', 'destroy', '-r', vhost])
+				call(['zfs', 'destroy', '-r', settings.KUMQUAT_VHOST_DATASET + '/.Trash/' + vhost])
 		else:
 			trash = settings.KUMQUAT_VHOST_ROOT + '/.Trash/'
 			shutil.rmtree(trash)
