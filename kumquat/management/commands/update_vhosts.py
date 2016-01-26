@@ -8,8 +8,13 @@ import uuid
 import os
 
 def write_certs():
+	file_list = []
 	for cert in SSLCert.objects.all():
 		cert.write_bundle()
+		file_list += [os.path.basename(cert.bundle_name())]
+	for f in os.listdir(settings.KUMQUAT_CERT_PATH):
+		if f not in file_list:
+			os.unlink(settings.KUMQUAT_CERT_PATH + '/' + f)
 
 def write_vhost_config():
 	config = ''
