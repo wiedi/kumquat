@@ -146,7 +146,7 @@ LOGGING = {
 # kumquat
 
 KUMQUAT_BACKEND_SOCKET   = "ipc:///tmp/kumquat_backend"
-KUMQUAT_CERT_PATH        = '/opt/local/etc/openssl/httpd/'
+KUMQUAT_CERT_PATH        = '/opt/local/etc/openssl/kumquat/'
 KUMQUAT_VHOST_CONFIG     = '/opt/local/etc/httpd/vhosts.conf'
 KUMQUAT_VHOST_ROOT       = '/srv/www/'
 KUMQUAT_VHOST_UID        = 501
