@@ -8,6 +8,7 @@ import zerorpc
 from django.core.management.base import BaseCommand, CommandError
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+from django.db import connection
 from web.models import VHost, SSLCert, DefaultVHost
 from update_vhosts import update_vhosts
 from update_cronjobs import update_cronjobs
@@ -23,12 +24,15 @@ def locked_update_cronjobs():
 
 class Backend(object):
 	def update_vhosts(self):
+		connection.close()
 		spawn(locked_update_vhosts)
 
 	def update_cronjobs(self):
+		connection.close()
 		spawn(locked_update_cronjobs)
 
 	def snapshot_list(self, vhost):
+		connection.close()
 		if not settings.KUMQUAT_USE_ZFS:
 			raise Exception("Snapshots only supported with ZFS")
 
@@ -51,6 +55,7 @@ class Backend(object):
 		return snapshots
 	
 	def snapshot_create(self, vhost, name):
+		connection.close()
 		if not settings.KUMQUAT_USE_ZFS:
 			raise Exception("Snapshots only supported with ZFS")
 
@@ -69,6 +74,7 @@ class Backend(object):
 
 
 	def snapshot_rollback(self, vhost, name):
+		connection.close()
 		if not settings.KUMQUAT_USE_ZFS:
 			raise Exception("Snapshots only supported with ZFS")
 
@@ -77,6 +83,7 @@ class Backend(object):
 		call(['zfs', 'rollback', '-r', ds + '@' + name])
 
 	def snapshot_delete(self, vhost, name):
+		connection.close()
 		if not settings.KUMQUAT_USE_ZFS:
 			raise Exception("Snapshots only supported with ZFS")
 
