@@ -22,7 +22,6 @@ SECRET_KEY = '^s7@cvx=$d)uvd75)u_p(w12zswl%**et1s2xys$wkq-sx($-d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -57,11 +56,28 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'kumquat_web.urls'
 WSGI_APPLICATION = 'kumquat_web.wsgi.application'
 
-TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
-
-TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
-	'django_settings_export.settings_export',
-)
+TEMPLATES = [
+	{
+		'BACKEND': 'django.template.backends.django.DjangoTemplates',
+		'APP_DIRS': True,
+		'DIRS': [
+			os.path.join(BASE_DIR, 'templates'),
+		],
+		'OPTIONS': {
+			'debug': True,
+			'context_processors': [
+				'django.contrib.auth.context_processors.auth',
+				'django.template.context_processors.debug',
+				'django.template.context_processors.i18n',
+				'django.template.context_processors.media',
+				'django.template.context_processors.static',
+				'django.template.context_processors.tz',
+				'django.contrib.messages.context_processors.messages',
+				'django_settings_export.settings_export',
+			],
+		},
+	},
+]
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
