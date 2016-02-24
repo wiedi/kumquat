@@ -4,7 +4,7 @@ from web.models import VHost
 
 class AccountCreateForm(forms.ModelForm):
 	password = forms.CharField(widget=forms.widgets.PasswordInput)
-	vhost    = forms.ModelChoiceField(queryset=VHost.objects.all(), empty_label="/")
+	vhost    = forms.ModelChoiceField(queryset=VHost.objects.all(), empty_label="/", required=False)
 	class Meta:
 		model = Account
 		fields = ('name', 'password', 'vhost', 'path')
