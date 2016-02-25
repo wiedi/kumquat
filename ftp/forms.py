@@ -12,6 +12,7 @@ class AccountCreateForm(forms.ModelForm):
 
 class AccountUpdateForm(forms.ModelForm):
 	new_password = forms.CharField(required=False, widget=forms.widgets.PasswordInput)
+	vhost        = forms.ModelChoiceField(queryset=VHost.objects.all(), empty_label="/", required=False)
 	class Meta:
 		model = Account
 		fields = ('vhost', 'path')
