@@ -31,6 +31,13 @@ class DefaultVHost(models.Model):
 	domain = models.OneToOneField(Domain, primary_key=True)
 	vhost  = models.ForeignKey(VHost, blank=False)
 
+class VHostAlias(models.Model):
+	alias  = models.CharField(max_length=default_length, verbose_name=_('Alias'), help_text=_('Server alias for virtual host.'), validators=[DomainNameValidator()], unique=True)
+	vhost  = models.ForeignKey(VHost, blank=False)
+
+	def __unicode__(self):
+		return unicode(self.alias)
+
 
 class SSLCert(models.Model):
 	cn               = models.CharField(max_length=default_length)
