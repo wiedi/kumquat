@@ -15,6 +15,7 @@ from forms import SSLCertForm, SnapshotForm
 import zerorpc
 import mmap
 import os
+import re
 
 def update_vhosts(*args, **kwargs):
 	zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET).update_vhosts()
@@ -149,11 +150,17 @@ def vhostErrorLogList(request, pk):
 	v = get_object_or_404(VHost, pk = pk)
 	elogfile = settings.KUMQUAT_VHOST_ERROR_LOG.format(vhost = unicode(v))
 	try:
-		errorlog = [s.replace('\\n', '\n').strip() for s in tail(elogfile, 25)]
+		errorlog = tail(elogfile, 25)
 	except:
 		errorlog = []
 
+	log = []
+	for line in errorlog:
+		m = re.match(r"\[(?P<time>[^\]]+)\] \[(?P<module>[^\]]+)\] \[pid (?P<pid>\d+):tid (?P<tid>\d+)\] \[client (?P<client>[^\]]+)\] (?P<message>.+)", line)
+		if not m: continue
+		s = m.groupdict()
+		s['message'] = s['message'].replace('\\n', '\n').strip()
+		log += [s]
 
-
-	return render(request, 'web/vhost_errorlog.html', {'errorlog': errorlog})
+	return render(request, 'web/vhost_errorlog.html', {'vhost': v, 'log': log})
 

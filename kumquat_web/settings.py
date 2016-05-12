@@ -165,6 +165,7 @@ KUMQUAT_BACKEND_SOCKET   = "ipc:///tmp/kumquat_backend"
 KUMQUAT_CERT_PATH        = '/opt/local/etc/openssl/kumquat/'
 KUMQUAT_VHOST_CONFIG     = '/opt/local/etc/httpd/vhosts.conf'
 KUMQUAT_VHOST_ROOT       = '/srv/www/'
+KUMQUAT_VHOST_ERROR_LOG  = '/srv/www/{vhost}/logs/error.log'
 KUMQUAT_VHOST_UID        = 501
 KUMQUAT_VHOST_GID        = 12
 KUMQUAT_USE_ZFS          = True
