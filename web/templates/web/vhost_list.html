@@ -38,11 +38,12 @@
 						<input type="submit" value="{% trans "Set Catch-All" %}" class="btn btn-xs btn-default"/>
 					</form>
 				{% endif %}
-			</t><td>
+			</td><td>
+				<a href="{% url "web_vhost_alias_list" vhost.pk %}" class="btn btn-xs btn-default">{% trans "Alias" %}</a>
 				{% if settings.KUMQUAT_USE_ZFS %}
 				<a href="{% url "web_vhost_snapshot_list" vhost.pk %}" class="btn btn-xs btn-default">{% trans "Snapshots" %}</a>
 				{% endif %}
-			</t><td>
+			</td><td>
 				<form action="{% url "web_vhost_delete" vhost.pk %}" method="post" class="pull-left confirm-delete">
 					{% csrf_token %}
 					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>
