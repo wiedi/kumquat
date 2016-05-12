@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block content %}
+	<h1>{% blocktrans %}Alias for {{ vhost }}{% endblocktrans %}</h1>
+
+	{% bootstrap_messages %}
+
+	<a href="{% url "web_vhost_alias_add" vhost.pk %}" class="btn btn-success pull-right">{% bootstrap_icon "plus" %} New</a>
+
+	{% if object_list %}
+	<table class="table table-striped table-condensed table-hover">
+		<thead>
+		<tr>
+			<th>{% trans "Name" %}</th>
+		</tr>
+		</thead>
+		{% for alias in object_list %}
+		<tr>
+			<td>{{ alias.alias }}</a></td>
+			<td>
+				<form action="{% url "web_vhost_alias_delete" alias.pk %}" method="post" class="pull-left confirm-delete">
+					{% csrf_token %}
+					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>
+				</form>
+			</td>
+		</tr>
+	    {% endfor %}
+	</table>
+    {% else %}
+        <p>{% trans "This VHost doesn't have any aliases yet." %}</p>
+    {% endif %}
+{% endblock %}

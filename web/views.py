@@ -10,8 +10,8 @@ from django.contrib import messages
 from django.conf import settings
 from datetime import datetime
 from kumquat.utils import LoginRequiredMixin, SuccessActionFormMixin, SuccessActionDeleteMixin
-from models import VHost, SSLCert, DefaultVHost
-from forms import SSLCertForm, SnapshotForm
+from models import VHost, SSLCert, DefaultVHost, VHostAlias
+from forms import SSLCertForm, SnapshotForm, VHostAliasForm
 import zerorpc
 
 def update_vhosts(*args, **kwargs):
@@ -57,6 +57,34 @@ def vhostCatchallDelete(request, pk):
 	update_vhosts()
 	return redirect('web_vhost_list')
 
+# VHost Alias
+
+@login_required
+def vhostAliasList(request, pk):
+	v = get_object_or_404(VHost, pk = pk)
+	return render(request, 'web/vhostalias_list.html', {'vhost': v, 'object_list': VHostAlias.objects.filter(vhost = pk)})
+
+@login_required
+def vhostAliasAdd(request, pk):
+	v = get_object_or_404(VHost, pk = pk)
+	form = VHostAliasForm(request.POST or None)
+	if form.is_valid():
+		alias = form.save(commit=False)
+		alias.vhost = v
+		alias.save()
+		update_vhosts()
+		messages.success(request, _("Successfull added"))
+		return redirect('web_vhost_alias_list', v.pk)
+	return render(request, 'web/vhostalias_form.html', {'form': form})
+
+@require_POST
+@login_required
+def vhostAliasDelete(request, pk):
+	alias = get_object_or_404(VHostAlias, pk = pk)
+	vhost = alias.vhost
+	alias.delete()
+	update_vhosts()
+	return redirect('web_vhost_alias_list', vhost.pk)
 
 # SSL Certs
 

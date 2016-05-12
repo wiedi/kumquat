@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from OpenSSL import SSL, crypto
+from .models import VHostAlias
 
 class SSLCertForm(forms.Form):
 	cert = forms.FileField(label = _("Certificate"))
@@ -31,6 +32,10 @@ class SSLCertForm(forms.Form):
 
 		return cleaned_data
 
+class VHostAliasForm(forms.ModelForm):
+	class Meta:
+		model  = VHostAlias
+		fields = ('alias',)
 
 class SnapshotForm(forms.Form):
 	name     = forms.RegexField(max_length=16, regex=r'^[a-z0-9_-]+$', label = _("Name"))
