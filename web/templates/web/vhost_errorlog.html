@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block content %}
+	<h1>{% trans "VHosts Errorlog" %}</h1>
+
+	{% bootstrap_messages %}
+
+	{% if errorlog %}
+	<table class="table table-striped table-condensed table-hover" style="word-wrap: break-word; table-layout: fixed;">
+		{% for line in errorlog %}
+		<tr>
+			<td>
+				<samp>{{line|linebreaksbr}}</samp>
+			</td>
+		</tr>
+	    {% endfor %}
+	</table>
+    {% else %}
+        <p>{% trans "You don't have any Errors yet." %}</p>
+    {% endif %}
+{% endblock %}

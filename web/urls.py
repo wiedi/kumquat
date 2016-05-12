@@ -10,6 +10,8 @@ urlpatterns = patterns('',
 	url(r'^vhost/(?P<pk>\d+)/catchall$',        views.vhostCatchallSet,        name='web_vhost_catchall_set'),
 	url(r'^vhost/catchall/(?P<pk>\d+)/delete$', views.vhostCatchallDelete,     name='web_vhost_catchall_delete'),
 
+	url(r'^vhost/(?P<pk>\d+)/errorlog$',        views.vhostErrorLogList,        name='web_vhost_errorlog_list'),
+
 	url(r'^vhost/(?P<pk>\d+)/snapshot$',        views.vhostSnapshotList,       name='web_vhost_snapshot_list'),
 	url(r'^vhost/(?P<pk>\d+)/snapshot/add$',    views.vhostSnapshotCreate,     name='web_vhost_snapshot_add'),
 #	url(r'^vhost/(?P<pk>\d+)/snapshot/(?P<name>[A-Za-z0-9_-]+)/download$', views.vhostSnapshotDownload, name='web_vhost_snapshot_download'),
