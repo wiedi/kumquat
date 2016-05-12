@@ -10,6 +10,7 @@ urlpatterns = patterns('',
 	url(r'^vhost/(?P<pk>\d+)/catchall$',        views.vhostCatchallSet,        name='web_vhost_catchall_set'),
 	url(r'^vhost/catchall/(?P<pk>\d+)/delete$', views.vhostCatchallDelete,     name='web_vhost_catchall_delete'),
 
+	url(r'^vhost/(?P<pk>\d+)/errorlog$',        views.vhostErrorLogList,       name='web_vhost_errorlog_list'),
 
 	url(r'^vhost/(?P<pk>\d+)/alias$',           views.vhostAliasList,       name='web_vhost_alias_list'),
 	url(r'^vhost/(?P<pk>\d+)/alias/add$',       views.vhostAliasAdd,        name='web_vhost_alias_add'),

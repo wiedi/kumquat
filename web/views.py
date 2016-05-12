@@ -13,9 +13,28 @@ from kumquat.utils import LoginRequiredMixin, SuccessActionFormMixin, SuccessAct
 from models import VHost, SSLCert, DefaultVHost, VHostAlias
 from forms import SSLCertForm, SnapshotForm, VHostAliasForm
 import zerorpc
+import mmap
+import os
+import re
 
 def update_vhosts(*args, **kwargs):
 	zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET).update_vhosts()
+
+def tail(filename, n):
+	# Returns last n lines from the filename. No exception handling
+	size = os.path.getsize(filename)
+	with open(filename, "rb") as f:
+		fm = mmap.mmap(f.fileno(), 0, mmap.MAP_SHARED, mmap.PROT_READ)
+		try:
+			for i in xrange(size - 1, -1, -1):
+				if fm[i] == '\n':
+					n -= 1
+					if n == -1:
+						break
+			return fm[i + 1 if i else 0:].splitlines()
+		finally:
+			fm.close()
+
 
 # VHost
 
@@ -150,3 +169,26 @@ def vhostSnapshotDelete(request, pk, name):
 	z = zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET)
 	z.snapshot_delete(v.pk, name)
 	return redirect('web_vhost_snapshot_list', pk)
+
+
+# Error Logs
+
+@login_required
+def vhostErrorLogList(request, pk):
+	v = get_object_or_404(VHost, pk = pk)
+	elogfile = settings.KUMQUAT_VHOST_ERROR_LOG.format(vhost = unicode(v))
+	try:
+		errorlog = tail(elogfile, 25)
+	except:
+		errorlog = []
+
+	log = []
+	for line in errorlog:
+		m = re.match(r"\[(?P<time>[^\]]+)\] \[(?P<module>[^\]]+)\] \[pid (?P<pid>\d+):tid (?P<tid>\d+)\] \[client (?P<client>[^\]]+)\] (?P<message>.+)", line)
+		if not m: continue
+		s = m.groupdict()
+		s['message'] = s['message'].replace('\\n', '\n').strip()
+		log += [s]
+
+	return render(request, 'web/vhost_errorlog.html', {'vhost': v, 'log': log})
+
