@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from OpenSSL import SSL, crypto
 from x509 import parseAsn1Generalizedtime, x509name_to_str, serial_to_hex
+from annoying.fields import AutoOneToOneField
 from kumquat.models import Domain
 from kumquat.utils import DomainNameValidator
 import re
@@ -13,6 +14,7 @@ class VHost(models.Model):
 	name   = models.CharField(max_length=default_length, verbose_name=_('Sub Domain'), help_text=_('Child part of your domain that is used to organize your site content.'), validators=[DomainNameValidator()])
 	domain = models.ForeignKey(Domain, blank=False)
 	cert   = models.ForeignKey('SSLCert', blank=True, null=True, on_delete=models.SET_NULL, verbose_name='SSL Certificate')
+	use_letsencrypt = models.BooleanField(verbose_name=_('SSL Certificate managed by Let\'s Encrypt'), default=False)
 
 	def webroot(self):
 		return settings.KUMQUAT_VHOST_ROOT + '/' + str(self.punycode())
@@ -38,6 +40,10 @@ class VHostAlias(models.Model):
 	def __unicode__(self):
 		return unicode(self.alias)
 
+class LetsEncrypt(models.Model):
+	vhost = AutoOneToOneField(VHost, on_delete=models.CASCADE)
+	state = models.CharField(max_length=default_length, default='REQUESTED')
+	last_message = models.CharField(max_length=default_length)
 
 class SSLCert(models.Model):
 	cn               = models.CharField(max_length=default_length)
@@ -49,6 +55,7 @@ class SSLCert(models.Model):
 	cert             = models.TextField()
 	key              = models.TextField()
 	ca               = models.TextField()
+
 
 	def set_cert(self, cert, key, ca):
 		self.cert = cert
