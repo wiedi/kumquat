@@ -15,6 +15,10 @@
 				<p class="form-control-static">
 					{% if object.letsencrypt.state == 'REQUESTED' %}
 						<span class="label label-info">
+					{% else if object.letsencrypt.state == 'VALID' %}
+						<span class="label label-success">
+					{% else if object.letsencrypt.state == 'EXPIRE_SOON' %}
+						<span class="label label-warning">
 					{% else %}
 						<span class="label label-default">
 					{% endif %}
