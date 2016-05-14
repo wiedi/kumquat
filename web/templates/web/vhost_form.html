@@ -7,8 +7,28 @@
 	<form method="post" class="form-horizontal" enctype="multipart/form-data" role="form">
 		{% csrf_token %}
 		{% bootstrap_form form layout='horizontal' %}
+
+		{% if object.use_letsencrypt %}
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="letsencrypt_state">{% trans "Let's Encrypt Status" %}</label>
+			<div class="col-md-9">
+				<p class="form-control-static">
+					{% if object.letsencrypt.state == 'REQUESTED' %}
+						<span class="label label-info">
+					{% else %}
+						<span class="label label-default">
+					{% endif %}
+							{{ object.letsencrypt.state }}
+						</span>
+					<pre>{{ object.letsencrypt.last_message }}</pre>
+				</p>
+			</div>
+		</div>
+
+		{% endif %}
+
 		{% buttons layout='horizontal' submit='OK' %}
 		{% endbuttons %}
 	</form>
-	{{ object.letsencrypt.state }}
+
 {% endblock %}
