@@ -5,6 +5,7 @@ from django.conf import settings
 from web.models import SSLCert, VHost, LetsEncrypt
 from subprocess import call
 from free_tls_certificates import client
+from django.utils import timezone
 import requests.exceptions
 import acme.messages
 import uuid
@@ -33,7 +34,7 @@ def issue_cert():
 		except client.NeedToTakeAction as e:
 			for action in e.actions:
 				if isinstance(action, client.NeedToInstallFile):
-					vhost.letsencrypt.last_message = 'Domainname validation required'
+					vhost.letsencrypt.last_message = 'Domainname validation required.'
 					vhost.letsencrypt.save()
 					with open(settings.LETSENCRYPT_ACME_FOLDER + action.file_name, 'a') as f:
 						f.write(action.contents)
@@ -44,9 +45,17 @@ def issue_cert():
 			vhost.letsencrypt.last_message = str(e)
 			vhost.letsencrypt.save()
 
+def set_expire_soon():
+	for vhost in VHost.objects.filter(use_letsencrypt=True, cert__isnull=False, letsencrypt__state__in=['VALID', 'EXPIRE_SOON']):
+		if vhost.cert.valid_not_after < (timezone.now() + timezone.timedelta(days=30)):
+			vhost.letsencrypt.state = 'EXPIRE_SOON'
+			vhost.letsencrypt.last_message = 'Certificate will expire at ' + str(vhost.cert.valid_not_after)
+			vhost.letsencrypt.save()
+
 class Command(BaseCommand):
 	args = ''
 	help = 'issue lets encrypt ssl certificates'
 
 	def handle(self, *args, **options):
+		set_expire_soon()
 		issue_cert()
