@@ -4,7 +4,7 @@
 
 {% block content %}
 	<h1>{% trans "VHost" %}</h1>
-	<form method="post" class="form-horizontal" enctype="multipart/form-data" role="form">
+	<form method="post" class="form-horizontal" enctype="multipart/form-data" role="form" id="vhost_form">
 		{% csrf_token %}
 		{% bootstrap_form form layout='horizontal' %}
 
@@ -15,9 +15,9 @@
 				<p class="form-control-static">
 					{% if object.letsencrypt.state == 'REQUESTED' %}
 						<span class="label label-info">
-					{% else if object.letsencrypt.state == 'VALID' %}
+					{% elif object.letsencrypt.state == 'VALID' %}
 						<span class="label label-success">
-					{% else if object.letsencrypt.state == 'EXPIRE_SOON' %}
+					{% elif object.letsencrypt.state == 'EXPIRE_SOON' %}
 						<span class="label label-warning">
 					{% else %}
 						<span class="label label-default">

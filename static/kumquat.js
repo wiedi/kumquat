@@ -23,4 +23,8 @@ $(function() {
 			$("select[name='cert']").attr("disabled", false);
 		}
 	});
+	/* Django workaround to submit also disabled form fields */
+	$('#vhost_form').submit(function(){
+		$("select[name='cert']").removeAttr('disabled');
+	});
 })
