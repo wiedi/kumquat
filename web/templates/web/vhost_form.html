@@ -24,7 +24,9 @@
 					{% endif %}
 							{{ object.letsencrypt.state }}
 						</span>
+					{% if object.letsencrypt.last_message %}
 					<pre>{{ object.letsencrypt.last_message }}</pre>
+					{% endif %}
 				</p>
 			</div>
 		</div>
