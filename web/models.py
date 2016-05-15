@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 from OpenSSL import SSL, crypto
 from x509 import parseAsn1Generalizedtime, x509name_to_str, serial_to_hex
 from annoying.fields import AutoOneToOneField
@@ -25,6 +26,15 @@ class VHost(models.Model):
 	def punycode(self):
 		return unicode(self.name) + '.' + unicode(self.domain.punycode())
 
+	def letsencrypt_state(self):
+		if not self.use_letsencrypt:
+			return 'NOT_USED'
+		if not self.cert:
+			return 'REQUEST'
+		if self.cert.expire_soon():
+			return 'RENEW'
+		return 'VALID'
+
 	class Meta:
 		unique_together = (("name", "domain"),)
 
@@ -40,15 +50,8 @@ class VHostAlias(models.Model):
 	def __unicode__(self):
 		return unicode(self.alias)
 
-LETSENCRYPT_STATS = (
-	('REQUEST', 'Requesting'),
-	('VALID', 'Valid'),
-	('RENEW', 'Renewing'),
-)
-
 class LetsEncrypt(models.Model):
 	vhost = AutoOneToOneField(VHost, on_delete=models.CASCADE)
-	state = models.CharField(max_length=default_length, default='REQUEST', choices=LETSENCRYPT_STATS)
 	last_message = models.CharField(max_length=default_length, blank=True)
 
 class SSLCert(models.Model):
@@ -87,6 +90,9 @@ class SSLCert(models.Model):
 			f.write(self.cert)
 			f.write(self.key)
 			f.write(self.ca)
+
+	def expire_soon(self):
+		return self.valid_not_after < (timezone.now() + timezone.timedelta(days=30))
 
 	def __unicode__(self):
 		return self.cn + ' (' + self.serial + ')'

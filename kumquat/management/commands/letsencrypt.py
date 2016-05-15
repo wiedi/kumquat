@@ -6,14 +6,19 @@ from web.models import SSLCert, VHost, LetsEncrypt
 from subprocess import call
 from free_tls_certificates import client
 from django.utils import timezone
+from cProfile import Profile
 import requests.exceptions
 import acme.messages
 import uuid
 import os
+import io
+import pstats
 import re
 
 def issue_cert():
-	for vhost in VHost.objects.filter(use_letsencrypt=True, letsencrypt__state__in=['REQUEST', 'RENEW']):
+	for vhost in VHost.objects.filter(use_letsencrypt=True):
+		if vhost.letsencrypt_state() not in ['REQUEST', 'RENEW']:
+			continue
 		try:
 			data = client.issue_certificate(
 				[unicode(vhost),] + list(vhost.vhostalias_set.values_list('alias', flat=True)),
@@ -44,21 +49,17 @@ def issue_cert():
 			vhost.letsencrypt.last_message = str(e)
 			vhost.letsencrypt.save()
 
-def set_expire_soon():
-	for vhost in VHost.objects.filter(
-		use_letsencrypt=True,
-		cert__isnull=False,
-		letsencrypt__state__in=['VALID', 'RENEW'],
-		cert__valid_not_after__lt = timezone.now() + timezone.timedelta(days=30)
-	):
-		vhost.letsencrypt.state='RENEW',
-		vhost.letsencrypt.last_message=''
-		vhost.letsencrypt.save()
-
 class Command(BaseCommand):
 	args = ''
 	help = 'issue lets encrypt ssl certificates'
 
+	def add_arguments(self, parser):
+		parser.add_argument('--profile', dest='profile', default=False, action='store_true')
+
 	def handle(self, *args, **options):
-		set_expire_soon()
+		if options['profile']:
+			profiler = Profile()
+			profiler.runcall(issue_cert)
+			pstats.Stats(profiler).sort_stats('cumulative').print_stats(25)
+			return
 		issue_cert()

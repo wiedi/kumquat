@@ -13,16 +13,16 @@
 			<label class="col-md-3 control-label" for="letsencrypt_state">{% trans "Let's Encrypt Status" %}</label>
 			<div class="col-md-9">
 				<p class="form-control-static">
-					{% if object.letsencrypt.state == 'REQUEST' %}
+					{% if object.letsencrypt_state == 'REQUEST' %}
 						<span class="label label-info">
-					{% elif object.letsencrypt.state == 'VALID' %}
+							{% trans "Requesting" %}
+					{% elif object.letsencrypt_state == 'VALID' %}
 						<span class="label label-success">
-					{% elif object.letsencrypt.state == 'RENEW' %}
+							{% trans "Valid" %}
+					{% elif object.letsencrypt_state == 'RENEW' %}
 						<span class="label label-warning">
-					{% else %}
-						<span class="label label-default">
+							{% trans "Renewing" %}
 					{% endif %}
-							{{ object.letsencrypt.get_state_display }}
 						</span>
 					{% if object.letsencrypt.last_message %}
 					<pre>{{ object.letsencrypt.last_message }}</pre>
