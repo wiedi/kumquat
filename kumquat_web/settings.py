@@ -35,6 +35,7 @@ INSTALLED_APPS = (
 	'django.contrib.staticfiles',
 	'bootstrap3',
 	'messagegroups',
+	'annoying',
 	'kumquat',
 	'web',
 	'mysql',
@@ -175,6 +176,10 @@ KUMQUAT_WEBMAIL_URL      = ''
 KUMQUAT_PHPMYADMIN_URL   = ''
 KUMQUAT_CRONJOB_CMD      = ['sudo', '-u', 'www', 'crontab']
 CORE_MAIL_TOKEN          = 'Soop6hoog6fohheagif8'
+LETSENCRYPT_TOS          = 'https://letsencrypt.org/documents/LE-SA-v1.0.1-July-27-2015.pdf'
+LETSENCRYPT_ACME_SERVER  = 'https://acme-v01.api.letsencrypt.org/directory'
+LETSENCRYPT_ACME_FOLDER  = '/opt/letsencrypt/acme/.well-known/acme-challenge/'
+LETSENCRYPT_STATE_FOLDER = '/opt/letsencrypt/state/'
 # valid whitelist values are described at https://mail.core.io/api/
 # set this to None (or leave it undefined) to whitelist the same domain as the account
 #CORE_MAIL_WHITELIST   = "*"
