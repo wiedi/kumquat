@@ -40,10 +40,16 @@ class VHostAlias(models.Model):
 	def __unicode__(self):
 		return unicode(self.alias)
 
+LETSENCRYPT_STATS = (
+	('REQUESTED', 'Requested'),
+	('VALID', 'Valid'),
+	('EXPIRE_SOON', 'Expire soon'),
+)
+
 class LetsEncrypt(models.Model):
 	vhost = AutoOneToOneField(VHost, on_delete=models.CASCADE)
-	state = models.CharField(max_length=default_length, default='REQUESTED')
-	last_message = models.CharField(max_length=default_length)
+	state = models.CharField(max_length=default_length, default='REQUESTED', choices=LETSENCRYPT_STATS)
+	last_message = models.CharField(max_length=default_length, blank=True)
 
 class SSLCert(models.Model):
 	cn               = models.CharField(max_length=default_length)

@@ -28,29 +28,30 @@ def issue_cert():
 			vhost.save()
 
 			vhost.letsencrypt.state = 'VALID'
-			vhost.letsencrypt.last_message = 'Certificate installed'
+			vhost.letsencrypt.last_message = ''
 			vhost.letsencrypt.save()
 
 		except client.NeedToTakeAction as e:
+			vhost.letsencrypt.last_message = str(e)
+			vhost.letsencrypt.save()
 			for action in e.actions:
 				if isinstance(action, client.NeedToInstallFile):
-					vhost.letsencrypt.last_message = 'Domainname validation required.'
-					vhost.letsencrypt.save()
-					with open(settings.LETSENCRYPT_ACME_FOLDER + action.file_name, 'a') as f:
+					with open(settings.LETSENCRYPT_ACME_FOLDER + action.file_name, 'w') as f:
 						f.write(action.contents)
-		except client.WaitABit as e:
-			vhost.letsencrypt.last_message = 'Retry later'
-			vhost.letsencrypt.save()
 		except Exception as e:
 			vhost.letsencrypt.last_message = str(e)
 			vhost.letsencrypt.save()
 
 def set_expire_soon():
-	for vhost in VHost.objects.filter(use_letsencrypt=True, cert__isnull=False, letsencrypt__state__in=['VALID', 'EXPIRE_SOON']):
-		if vhost.cert.valid_not_after < (timezone.now() + timezone.timedelta(days=30)):
-			vhost.letsencrypt.state = 'EXPIRE_SOON'
-			vhost.letsencrypt.last_message = 'Certificate will expire at ' + str(vhost.cert.valid_not_after)
-			vhost.letsencrypt.save()
+	for vhost in VHost.objects.filter(
+		use_letsencrypt=True,
+		cert__isnull=False,
+		letsencrypt__state__in=['VALID', 'EXPIRE_SOON'],
+		cert__valid_not_after__lt = timezone.now() + timezone.timedelta(days=30)
+	):
+		vhost.letsencrypt.state='EXPIRE_SOON',
+		vhost.letsencrypt.last_message=''
+		vhost.letsencrypt.save()
 
 class Command(BaseCommand):
 	args = ''

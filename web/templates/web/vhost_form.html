@@ -22,7 +22,7 @@
 					{% else %}
 						<span class="label label-default">
 					{% endif %}
-							{{ object.letsencrypt.state }}
+							{{ object.letsencrypt.get_state_display }}
 						</span>
 					{% if object.letsencrypt.last_message %}
 					<pre>{{ object.letsencrypt.last_message }}</pre>
