@@ -12,7 +12,7 @@ import uuid
 import os
 
 def issue_cert():
-	for vhost in VHost.objects.filter(use_letsencrypt=True, letsencrypt__state__in=['REQUESTED', 'EXPIRE_SOON']):
+	for vhost in VHost.objects.filter(use_letsencrypt=True, letsencrypt__state__in=['REQUEST', 'RENEW']):
 		try:
 			data = client.issue_certificate(
 				[unicode(vhost),] + list(vhost.vhostalias_set.values_list('alias', flat=True)),
@@ -46,10 +46,10 @@ def set_expire_soon():
 	for vhost in VHost.objects.filter(
 		use_letsencrypt=True,
 		cert__isnull=False,
-		letsencrypt__state__in=['VALID', 'EXPIRE_SOON'],
+		letsencrypt__state__in=['VALID', 'RENEW'],
 		cert__valid_not_after__lt = timezone.now() + timezone.timedelta(days=30)
 	):
-		vhost.letsencrypt.state='EXPIRE_SOON',
+		vhost.letsencrypt.state='RENEW',
 		vhost.letsencrypt.last_message=''
 		vhost.letsencrypt.save()
 

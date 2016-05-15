@@ -13,11 +13,11 @@
 			<label class="col-md-3 control-label" for="letsencrypt_state">{% trans "Let's Encrypt Status" %}</label>
 			<div class="col-md-9">
 				<p class="form-control-static">
-					{% if object.letsencrypt.state == 'REQUESTED' %}
+					{% if object.letsencrypt.state == 'REQUEST' %}
 						<span class="label label-info">
 					{% elif object.letsencrypt.state == 'VALID' %}
 						<span class="label label-success">
-					{% elif object.letsencrypt.state == 'EXPIRE_SOON' %}
+					{% elif object.letsencrypt.state == 'RENEW' %}
 						<span class="label label-warning">
 					{% else %}
 						<span class="label label-default">

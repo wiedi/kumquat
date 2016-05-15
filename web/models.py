@@ -41,14 +41,14 @@ class VHostAlias(models.Model):
 		return unicode(self.alias)
 
 LETSENCRYPT_STATS = (
-	('REQUESTED', 'Requested'),
+	('REQUEST', 'Requesting'),
 	('VALID', 'Valid'),
-	('EXPIRE_SOON', 'Expire soon'),
+	('RENEW', 'Renewing'),
 )
 
 class LetsEncrypt(models.Model):
 	vhost = AutoOneToOneField(VHost, on_delete=models.CASCADE)
-	state = models.CharField(max_length=default_length, default='REQUESTED', choices=LETSENCRYPT_STATS)
+	state = models.CharField(max_length=default_length, default='REQUEST', choices=LETSENCRYPT_STATS)
 	last_message = models.CharField(max_length=default_length, blank=True)
 
 class SSLCert(models.Model):
