@@ -21,7 +21,7 @@ def issue_cert():
 				acme_server = settings.LETSENCRYPT_ACME_SERVER)
 
 			cert = SSLCert()
-			cert.ssl_cert(cert=data['cert'], key=data['private_key'], ca=data['chain'])
+			cert.set_cert(cert=data['cert'], key=data['private_key'], ca=data['chain'])
 			cert.save()
 
 			vhost.cert = cert
