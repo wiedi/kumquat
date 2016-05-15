@@ -33,7 +33,6 @@ def issue_cert():
 			vhost.cert = cert
 			vhost.save()
 
-			vhost.letsencrypt.state = 'VALID'
 			vhost.letsencrypt.last_message = ''
 			vhost.letsencrypt.save()
 
