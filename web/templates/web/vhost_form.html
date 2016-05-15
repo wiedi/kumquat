@@ -4,10 +4,37 @@
 
 {% block content %}
 	<h1>{% trans "VHost" %}</h1>
-	<form method="post" class="form-horizontal" enctype="multipart/form-data" role="form">
+	<form method="post" class="form-horizontal" enctype="multipart/form-data" role="form" id="vhost_form">
 		{% csrf_token %}
 		{% bootstrap_form form layout='horizontal' %}
+
+		{% if object.use_letsencrypt %}
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="letsencrypt_state">{% trans "Let's Encrypt Status" %}</label>
+			<div class="col-md-9">
+				<p class="form-control-static">
+					{% if object.letsencrypt_state == 'REQUEST' %}
+						<span class="label label-info">
+							{% trans "Requesting" %}
+					{% elif object.letsencrypt_state == 'VALID' %}
+						<span class="label label-success">
+							{% trans "Valid" %}
+					{% elif object.letsencrypt_state == 'RENEW' %}
+						<span class="label label-warning">
+							{% trans "Renewing" %}
+					{% endif %}
+						</span>
+					{% if object.letsencrypt.last_message %}
+					<pre>{{ object.letsencrypt.last_message }}</pre>
+					{% endif %}
+				</p>
+			</div>
+		</div>
+
+		{% endif %}
+
 		{% buttons layout='horizontal' submit='OK' %}
 		{% endbuttons %}
 	</form>
+
 {% endblock %}
