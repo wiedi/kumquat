@@ -10,6 +10,7 @@ import requests.exceptions
 import acme.messages
 import uuid
 import os
+import re
 
 def issue_cert():
 	for vhost in VHost.objects.filter(use_letsencrypt=True, letsencrypt__state__in=['REQUEST', 'RENEW']):
@@ -36,7 +37,8 @@ def issue_cert():
 			vhost.letsencrypt.save()
 			for action in e.actions:
 				if isinstance(action, client.NeedToInstallFile):
-					with open(settings.LETSENCRYPT_ACME_FOLDER + action.file_name, 'w') as f:
+					file_name = re.sub(r'[^\w-]', '', action.file_name)
+					with open(settings.LETSENCRYPT_ACME_FOLDER + '/' + file_name, 'w') as f:
 						f.write(action.contents)
 		except Exception as e:
 			vhost.letsencrypt.last_message = str(e)
