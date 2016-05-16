@@ -14,6 +14,7 @@ import os
 import io
 import pstats
 import re
+import zerorpc
 
 def issue_cert():
 	for vhost in VHost.objects.filter(use_letsencrypt=True):
@@ -35,6 +36,8 @@ def issue_cert():
 
 			vhost.letsencrypt.last_message = ''
 			vhost.letsencrypt.save()
+
+			zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET).update_vhosts()
 
 		except client.NeedToTakeAction as e:
 			vhost.letsencrypt.last_message = str(e)
