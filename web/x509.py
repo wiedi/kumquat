@@ -23,7 +23,7 @@ import datetime
 from django.utils.timezone import get_fixed_timezone
 
 #: ASN1 time regexp
-_ASN1_TIME_REGEX = re.compile(r"^(\d+)([-+]\d\d)(\d\d)$")
+_ASN1_TIME_REGEX = re.compile(r"^(\d+)([-+])(\d\d)(\d\d)$")
 
 def parseAsn1Generalizedtime(value):
 	"""
@@ -37,16 +37,18 @@ def parseAsn1Generalizedtime(value):
 	m = _ASN1_TIME_REGEX.match(value)
 	if m:
 		# We have an offset
-		asn1time = m.group(1)
-		hours = int(m.group(2))
-		minutes = int(m.group(3))
-		utcoffset = (60 * hours) + minutes
+		asn1time  = m.group(1)
+		sign      = m.group(2)
+		hours     = int(m.group(3))
+		minutes   = int(m.group(4))
+		utcoffset = 60 * hours + minutes
+		if sign == '-':
+			utcoffset = -utcoffset
 	else:
 		if not value.endswith("Z"):
 			raise ValueError("Missing timezone")
 		asn1time = value[:-1]
 		utcoffset = 0
-
 	parsed = time.strptime(asn1time, "%Y%m%d%H%M%S")
 	return datetime.datetime(*(parsed[:7]), tzinfo=get_fixed_timezone(utcoffset))
 
