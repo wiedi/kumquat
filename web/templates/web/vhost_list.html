@@ -40,6 +40,7 @@
 				{% endif %}
 			</td><td>
 				<a href="{% url "web_vhost_alias_list" vhost.pk %}" class="btn btn-xs btn-default">{% trans "Alias" %}</a>
+				<a href="{% url "web_vhost_errorlog_list" vhost.pk %}" class="btn btn-xs btn-default">{% trans "Error Log" %}</a>
 				{% if settings.KUMQUAT_USE_ZFS %}
 				<a href="{% url "web_vhost_snapshot_list" vhost.pk %}" class="btn btn-xs btn-default">{% trans "Snapshots" %}</a>
 				{% endif %}
