@@ -14,8 +14,10 @@ import os
 import io
 import pstats
 import re
+import zerorpc
 
 def issue_cert():
+	letsencrypt_issued = False
 	for vhost in VHost.objects.filter(use_letsencrypt=True):
 		if vhost.letsencrypt_state() not in ['REQUEST', 'RENEW']:
 			continue
@@ -36,6 +38,8 @@ def issue_cert():
 			vhost.letsencrypt.last_message = ''
 			vhost.letsencrypt.save()
 
+			letsencrypt_issued = True
+
 		except client.NeedToTakeAction as e:
 			vhost.letsencrypt.last_message = str(e)
 			vhost.letsencrypt.save()
@@ -47,6 +51,9 @@ def issue_cert():
 		except Exception as e:
 			vhost.letsencrypt.last_message = str(e)
 			vhost.letsencrypt.save()
+
+	if letsencrypt_issued:
+		zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET).update_vhosts()
 
 class Command(BaseCommand):
 	args = ''
