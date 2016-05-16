@@ -1,4 +1,5 @@
 # Copyright (C) 2006, 2007, 2010, 2011 Google Inc.
+# Copyright (C) 2016 Sebastian Wiedenroth
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,6 +20,7 @@ import time
 import OpenSSL
 import re
 import datetime
+from django.utils.timezone import get_fixed_timezone
 
 #: ASN1 time regexp
 _ASN1_TIME_REGEX = re.compile(r"^(\d+)([-+]\d\d)(\d\d)$")
@@ -46,7 +48,7 @@ def parseAsn1Generalizedtime(value):
 		utcoffset = 0
 
 	parsed = time.strptime(asn1time, "%Y%m%d%H%M%S")
-	return datetime.datetime(*(parsed[:7])) - datetime.timedelta(minutes=utcoffset)
+	return datetime.datetime(*(parsed[:7]), tzinfo=get_fixed_timezone(utcoffset))
 
 
 def x509name_to_str(on):
