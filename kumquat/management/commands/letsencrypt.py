@@ -28,8 +28,9 @@ def issue_cert():
 				agree_to_tos_url = settings.LETSENCRYPT_TOS,
 				acme_server = settings.LETSENCRYPT_ACME_SERVER)
 
+			chain = "\n".join(data['chain'])
 			cert = SSLCert()
-			cert.set_cert(cert=data['cert'], key=data['private_key'], ca=data['chain'])
+			cert.set_cert(cert=data['cert'], key=data['private_key'], ca=chain)
 			cert.save()
 
 			vhost.cert = cert
