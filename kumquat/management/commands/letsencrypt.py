@@ -31,6 +31,7 @@ def issue_cert():
 			chain = "\n".join(data['chain'])
 			cert = SSLCert()
 			cert.set_cert(cert=data['cert'], key=data['private_key'], ca=chain)
+			cert.save()
 
 			vhost.cert = cert
 			vhost.save()
