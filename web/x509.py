@@ -34,6 +34,7 @@ def parseAsn1Generalizedtime(value):
 	@return: datetime in UTC
 
 	"""
+	value = value.decode('utf-8')
 	m = _ASN1_TIME_REGEX.match(value)
 	if m:
 		# We have an offset
@@ -54,7 +55,7 @@ def parseAsn1Generalizedtime(value):
 
 
 def x509name_to_str(on):
-	return ', '.join([x[0] + '=' + x[1] for x in on.get_components()])
+	return b', '.join([x[0] + b'=' + x[1] for x in on.get_components()])
 
 def serial_to_hex(serial):
 	return ':'.join(map(''.join, zip(*[iter(hex(serial)[2:].strip('L')[::])]*2)))
