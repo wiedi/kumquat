@@ -7,29 +7,32 @@ from django.conf import settings
 from django.utils.translation import ugettext as _
 from kumquat.utils import LoginRequiredMixin, SuccessActionFormMixin, SuccessActionDeleteMixin
 from cron.models import Cronjob
-import zerorpc
+
 
 def update_cronjobs(*args, **kwargs):
-    zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET).update_cronjobs()
+	if not settings.KUMQUAT_USE_0RPC:
+		return
+	import zerorpc
+	zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET).update_cronjobs()
 
 class CronjobList(LoginRequiredMixin, ListView):
-    model = Cronjob
+	model = Cronjob
 
 class CronjobCreate(LoginRequiredMixin, SuccessActionFormMixin, SuccessMessageMixin, CreateView):
-    model = Cronjob
-    fields = ('command','when',)
-    success_url = reverse_lazy('cronjob_list')
-    success_message = _("Cronjob was created successfully")
-    success_action = update_cronjobs
+	model = Cronjob
+	fields = ('command','when',)
+	success_url = reverse_lazy('cronjob_list')
+	success_message = _("Cronjob was created successfully")
+	success_action = update_cronjobs
 
 class CronjobUpdate(LoginRequiredMixin, SuccessActionFormMixin, SuccessMessageMixin, UpdateView):
-    model = Cronjob
-    fields = ('command','when',)
-    success_url = reverse_lazy('cronjob_list')
-    success_message = _("Cronjob was updated successfully")
-    success_action = update_cronjobs
+	model = Cronjob
+	fields = ('command','when',)
+	success_url = reverse_lazy('cronjob_list')
+	success_message = _("Cronjob was updated successfully")
+	success_action = update_cronjobs
 
 class CronjobDelete(LoginRequiredMixin, SuccessActionDeleteMixin, DeleteView):
-    model = Cronjob
-    success_url = reverse_lazy('cronjob_list')
-    success_action = update_cronjobs
+	model = Cronjob
+	success_url = reverse_lazy('cronjob_list')
+	success_action = update_cronjobs

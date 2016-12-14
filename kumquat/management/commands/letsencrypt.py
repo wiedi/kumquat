@@ -14,7 +14,8 @@ import os
 import io
 import pstats
 import re
-import zerorpc
+if settings.KUMQUAT_USE_0RPC:
+	import zerorpc
 
 def issue_cert():
 	letsencrypt_issued = False
@@ -53,7 +54,7 @@ def issue_cert():
 			vhost.letsencrypt.last_message = str(e)
 			vhost.letsencrypt.save()
 
-	if letsencrypt_issued:
+	if letsencrypt_issued and settings.KUMQUAT_USE_0RPC:
 		zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET).update_vhosts()
 
 class Command(BaseCommand):

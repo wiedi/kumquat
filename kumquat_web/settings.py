@@ -170,6 +170,11 @@ KUMQUAT_VHOST_ERROR_LOG  = '/srv/www/{vhost}/logs/error.log'
 KUMQUAT_VHOST_UID        = 501
 KUMQUAT_VHOST_GID        = 12
 KUMQUAT_USE_ZFS          = True
+
+# without 0rpc the management jobs will have to be called by a cronjob
+# some features (like snapshots) will not be available
+KUMQUAT_USE_0RPC         = True
+
 KUMQUAT_VHOST_DATASET    = 'zones/9764b9e4-7848-4af0-be52-131affa2bbcb/data/www'
 KUMQUAT_WEBSERVER_RELOAD = 'svcadm refresh apache'
 KUMQUAT_WEBMAIL_URL      = ''
@@ -189,4 +194,5 @@ SETTINGS_EXPORT = [
 	'KUMQUAT_WEBMAIL_URL',
 	'KUMQUAT_PHPMYADMIN_URL',
 	'KUMQUAT_USE_ZFS',
+	'KUMQUAT_USE_0RPC',
 ]

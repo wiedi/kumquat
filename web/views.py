@@ -8,16 +8,20 @@ from django.utils.translation import ugettext as _
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.conf import settings
+from django.http import Http404
 from datetime import datetime
 from kumquat.utils import LoginRequiredMixin, SuccessActionFormMixin, SuccessActionDeleteMixin
 from web.models import VHost, SSLCert, DefaultVHost, VHostAlias
 from web.forms import SSLCertForm, SnapshotForm, VHostAliasForm
-import zerorpc
+if settings.KUMQUAT_USE_0RPC:
+	import zerorpc
 import mmap
 import os
 import re
 
 def update_vhosts(*args, **kwargs):
+	if not settings.KUMQUAT_USE_0RPC:
+		return
 	zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET).update_vhosts()
 
 def tail(filename, n):
@@ -130,6 +134,8 @@ class SSLCertDelete(LoginRequiredMixin, DeleteView):
 
 @login_required
 def vhostSnapshotList(request, pk):
+	if not settings.KUMQUAT_USE_0RPC:
+		raise Http404
 	v = get_object_or_404(VHost, pk = pk)
 	z = zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET)
 	snapshots = z.snapshot_list(v.pk)
@@ -141,6 +147,8 @@ def vhostSnapshotList(request, pk):
 
 @login_required
 def vhostSnapshotCreate(request, pk):
+	if not settings.KUMQUAT_USE_0RPC:
+		raise Http404
 	v = get_object_or_404(VHost, pk = pk)
 	form = SnapshotForm(request.POST or None)
 	if form.is_valid():
@@ -156,6 +164,8 @@ def vhostSnapshotCreate(request, pk):
 @require_POST
 @login_required
 def vhostSnapshotRollback(request, pk, name):
+	if not settings.KUMQUAT_USE_0RPC:
+		raise Http404
 	v = get_object_or_404(VHost, pk = pk)
 	z = zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET)
 	z.snapshot_rollback(v.pk, name)
@@ -165,6 +175,8 @@ def vhostSnapshotRollback(request, pk, name):
 @require_POST
 @login_required
 def vhostSnapshotDelete(request, pk, name):
+	if not settings.KUMQUAT_USE_0RPC:
+		raise Http404
 	v = get_object_or_404(VHost, pk = pk)
 	z = zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET)
 	z.snapshot_delete(v.pk, name)
