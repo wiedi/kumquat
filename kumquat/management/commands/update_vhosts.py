@@ -9,7 +9,7 @@ import os
 
 def write_certs():
 	file_list = []
-	for cert in SSLCert.objects.all():
+	for cert in SSLCert.objects.filter(vhost__isnull = False).distinct():
 		cert.write_bundle()
 		file_list += [os.path.basename(cert.bundle_name())]
 	for f in os.listdir(settings.KUMQUAT_CERT_PATH):
