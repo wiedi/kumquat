@@ -4,8 +4,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.utils.translation import ugettext as _
 from django.contrib.messages.views import SuccessMessageMixin
 from kumquat.utils import LoginRequiredMixin
-from models import Account
-from forms import AccountUpdateForm, AccountCreateForm
+from ftp.models import Account
+from ftp.forms import AccountUpdateForm, AccountCreateForm
 
 class AccountList(LoginRequiredMixin, ListView):
 	model = Account

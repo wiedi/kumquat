@@ -20,7 +20,7 @@
 		</thead>
 		{% for cronjob in object_list %}
 		<tr>
-			<td><a href="{% url "cronjob_update" cronjob.pk %}">{{ cronjob.command|truncatechars:64 }}</a></td>
+			<td title="{{ cronjob }}"><a href="{% url "cronjob_update" cronjob.pk %}">{{ cronjob.command|truncatechars:64 }}</a></td>
 			<td>{{ cronjob.get_when_display }}</td>
 			<td>
 				<form action="{% url "cronjob_delete" cronjob.pk %}" method="post" class="pull-left confirm-delete">

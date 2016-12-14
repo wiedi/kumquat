@@ -3,10 +3,10 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from OpenSSL import SSL, crypto
-from x509 import parseAsn1Generalizedtime, x509name_to_str, serial_to_hex
 from annoying.fields import AutoOneToOneField
 from kumquat.models import Domain
 from kumquat.utils import DomainNameValidator
+from web.x509 import parseAsn1Generalizedtime, x509name_to_str, serial_to_hex
 import re
 
 default_length = 255
@@ -20,11 +20,11 @@ class VHost(models.Model):
 	def webroot(self):
 		return settings.KUMQUAT_VHOST_ROOT + '/' + str(self.punycode())
 
-	def __unicode__(self):
-		return unicode(self.name) + '.' + unicode(self.domain)
+	def __str__(self):
+		return str(self.name) + '.' + str(self.domain)
 
 	def punycode(self):
-		return unicode(self.name) + '.' + unicode(self.domain.punycode())
+		return str(self.name) + '.' + str(self.domain.punycode())
 
 	def letsencrypt_state(self):
 		if not self.use_letsencrypt:
@@ -47,8 +47,8 @@ class VHostAlias(models.Model):
 	alias  = models.CharField(max_length=default_length, verbose_name=_('Alias'), help_text=_('Server alias for virtual host.'), validators=[DomainNameValidator()], unique=True)
 	vhost  = models.ForeignKey(VHost, blank=False)
 
-	def __unicode__(self):
-		return unicode(self.alias)
+	def __str__(self):
+		return str(self.alias)
 
 class LetsEncrypt(models.Model):
 	vhost = AutoOneToOneField(VHost, on_delete=models.CASCADE)
@@ -94,5 +94,5 @@ class SSLCert(models.Model):
 	def expire_soon(self):
 		return self.valid_not_after < (timezone.now() + timezone.timedelta(days=30))
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.cn + ' (' + self.serial + ')'

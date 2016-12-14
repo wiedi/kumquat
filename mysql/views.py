@@ -9,7 +9,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.db import connections
 from django.http import Http404
 from kumquat.utils import LoginRequiredMixin
-from forms import *
+from mysql.forms import *
 
 def list_databases(*kwargs):
 		cursor = connections['kumquat_mysql'].cursor()

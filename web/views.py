@@ -10,8 +10,8 @@ from django.contrib import messages
 from django.conf import settings
 from datetime import datetime
 from kumquat.utils import LoginRequiredMixin, SuccessActionFormMixin, SuccessActionDeleteMixin
-from models import VHost, SSLCert, DefaultVHost, VHostAlias
-from forms import SSLCertForm, SnapshotForm, VHostAliasForm
+from web.models import VHost, SSLCert, DefaultVHost, VHostAlias
+from web.forms import SSLCertForm, SnapshotForm, VHostAliasForm
 import zerorpc
 import mmap
 import os
@@ -176,7 +176,7 @@ def vhostSnapshotDelete(request, pk, name):
 @login_required
 def vhostErrorLogList(request, pk):
 	v = get_object_or_404(VHost, pk = pk)
-	elogfile = settings.KUMQUAT_VHOST_ERROR_LOG.format(vhost = unicode(v))
+	elogfile = settings.KUMQUAT_VHOST_ERROR_LOG.format(vhost = str(v))
 	try:
 		errorlog = tail(elogfile, 25)
 	except:

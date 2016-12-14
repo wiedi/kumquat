@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 import os
 import shutil
-from subprocess import call, check_output
+from subprocess import call
 
 
 class Command(BaseCommand):

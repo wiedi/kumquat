@@ -1,5 +1,5 @@
 from django import forms
-from models import Account
+from ftp.models import Account
 from web.models import VHost
 
 class AccountCreateForm(forms.ModelForm):

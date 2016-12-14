@@ -8,8 +8,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
 from kumquat.utils import LoginRequiredMixin
 from kumquat.models import Domain
-from models import Account, Redirect
-from forms import AccountUpdateForm, AccountCreateForm
+from mail.models import Account, Redirect
+from mail.forms import AccountUpdateForm, AccountCreateForm
 import json
 
 # Accounts
@@ -78,7 +78,7 @@ def export(request):
 	
 	data = {}
 	for domain in Domain.objects.all():
-		punycode_domain = unicode(domain.punycode())
+		punycode_domain = domain.punycode()
 		data[punycode_domain] = {
 			"account": [],
 			"alias":   [],

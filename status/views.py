@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from info import info
+from status.info import info
 
 @login_required
 def status(request):

@@ -8,7 +8,7 @@ import socket
 
 def meminfo():
 		try:
-			out = check_output(["kstat", "-p", "memory_cap:*:*:"]).strip()
+			out = check_output(["kstat", "-p", "memory_cap:*:*:"]).decode("utf-8").strip()
 			mem = dict([(x[0].split(':')[-1], x[1]) for x in (l.split() for l in out.split("\n"))])
 			return {
 				'mem_cap':   int(mem['physcap']),
@@ -28,7 +28,7 @@ def meminfo():
 
 def sysinfo():
 		try:
-			return json.loads(check_output("sysinfo"))
+			return json.loads(check_output(["sysinfo"]).decode("utf-8"))
 		except:
 			return {}
 
@@ -39,7 +39,7 @@ def imageinfo():
 			return {}
 
 def diskinfo():
-		out = check_output(["df", "/"]).strip().split('\n')
+		out = check_output(["df", "-k", "/"]).strip().split(b'\n')
 		vals = out[-1].split()
 		return {
 				'size': int(vals[1]) * 1024,
@@ -57,9 +57,7 @@ def info():
 				'loadavg':    os.getloadavg(),
 				'cpu_cores':  sys.get('CPU Total Cores', ''),
 				'live_image': sys.get('Live Image', ''),
-
-				'hostname':        socket.gethostname(),
-
+				'hostname':   socket.gethostname(),
 				'image':      img.get('Image'),
 				'base_image': img.get('Base Image', '').replace(' ', '-'),
 		}

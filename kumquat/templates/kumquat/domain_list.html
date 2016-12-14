@@ -17,7 +17,7 @@
 		</thead>
 		{% for domain in object_list %}
 		<tr>
-			<td>{{ domain }}</td>
+			<td title="{{ domain.punycode }}">{{ domain }}</td>
 			<td>
 				<form action="{% url "domain_delete" domain.id %}" method="post" class="confirm-delete">
 					{% csrf_token %}
@@ -25,6 +25,6 @@
 				</form>
 			</td>
 		</tr>
-	    {% endfor %}
+		{% endfor %}
 	</table>
 {% endblock %}

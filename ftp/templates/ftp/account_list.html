@@ -19,7 +19,7 @@
 		{% for account in object_list %}
 		<tr>
 			<td><a href="{% url "ftp_account_update" account.id %}">{{ account.name }}</a></td>
-			<td>{{ account.vhost }}</td>
+			<td>{{ account.vhost|default:'-' }}</td>
 			<td>{{ account.path }}</td>
 			<td>
 				<form action="{% url "ftp_account_delete" account.id %}" method="post" class="confirm-delete">

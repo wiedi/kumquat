@@ -1,5 +1,5 @@
 from django import forms
-from models import Account
+from mail.models import Account
 
 class AccountCreateForm(forms.ModelForm):
 	password = forms.CharField(widget=forms.widgets.PasswordInput)

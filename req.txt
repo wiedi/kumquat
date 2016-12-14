@@ -1,11 +1,12 @@
-Django==1.8.2
-django-bootstrap3==5.4.0
-django-cronfield==0.2
-django-messagegroups==0.4.4
-django-settings-export==1.0.6
-passlib==1.6.2
-MySQL-python==1.2.5
-pyOpenSSL==0.14
-zerorpc==0.4.4
-django-annoying==0.9.0
-free-tls-certificates==0.1.3
+# force cryptography < 1.7 for now (indirect dep, can be removed once openssl mess is sorted)
+cryptography==1.6
+Django==1.10.4
+django-annoying==0.10.3
+django-bootstrap3==7.1.0
+django-messagegroups==0.4.5
+django-settings-export==1.2.1
+free-tls-certificates==0.1.6
+mysqlclient==1.3.9
+passlib==1.7.0
+pyOpenSSL==0.15
+zerorpc==0.6.0

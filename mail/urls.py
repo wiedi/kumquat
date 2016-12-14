@@ -1,7 +1,7 @@
-from django.conf.urls import patterns, url
-import views
+from django.conf.urls import url
+from mail import views
 
-urlpatterns = patterns('',
+urlpatterns = [
 	url(r'^accounts/$',                   views.AccountList.as_view(),    name='mail_account_list'),
 	url(r'^accounts/add$',                views.AccountCreate.as_view(),  name='mail_account_add'),
 	url(r'^accounts/(?P<pk>\d+)/update$', views.AccountUpdate.as_view(),  name='mail_account_update'),
@@ -14,4 +14,4 @@ urlpatterns = patterns('',
 
 	url(r'^export.json$', views.export, name='mail_export'),
 
-)
+]

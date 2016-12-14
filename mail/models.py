@@ -14,8 +14,8 @@ class Account(models.Model):
 	def set_password(self, password):
 		self.password = sha512_crypt.encrypt(password)
 
-	def __unicode__(self):
-		return unicode(self.name) + '@' + unicode(self.domain)
+	def __str__(self):
+		return str(self.name) + '@' + str(self.domain)
 
 	class Meta:
 		unique_together = (('name', 'domain'),)
@@ -29,5 +29,5 @@ class Redirect(models.Model):
 	class Meta:
 		unique_together = (('name', 'domain'),)
 
-	def __unicode__(self):
-		return self.name + '@' + unicode(self.domain) + ' -> ' + self.to
+	def __str__(self):
+		return self.name + '@' + str(self.domain) + ' -> ' + self.to

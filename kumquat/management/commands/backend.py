@@ -40,7 +40,7 @@ class Backend(object):
 		snapshots = []
 		ds = settings.KUMQUAT_VHOST_DATASET + '/' + unicode(v)
 		try:
-			out = check_output(['zfs', 'list', '-o', 'name,creation,core:user_created', '-rpHt', 'snapshot', ds])
+			out = check_output(['zfs', 'list', '-o', 'name,creation,core:user_created', '-rpHt', 'snapshot', ds]).decode("utf-8")
 		except:
 			return []
 		for snap in out.strip().split("\n"):
@@ -90,7 +90,7 @@ class Backend(object):
 		v = get_object_or_404(VHost, pk = vhost)
 		ds = settings.KUMQUAT_VHOST_DATASET + '/' + unicode(v)
 		snap = ds + '@' + name
-		user_created = check_output(['zfs', 'get', '-Hp', 'core:user_created',  snap]).strip().split()[2]
+		user_created = check_output(['zfs', 'get', '-Hp', 'core:user_created',  snap]).decode("utf-8").strip().split()[2]
 		if user_created == '-':
 			raise Exception("Only user created Snapshots can be deleted")
 		call(['zfs', 'destroy', ds + '@' + name])

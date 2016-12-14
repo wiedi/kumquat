@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.utils.translation import ugettext as _
 from kumquat.utils import LoginRequiredMixin, SuccessActionFormMixin, SuccessActionDeleteMixin
-from models import Cronjob
+from cron.models import Cronjob
 import zerorpc
 
 def update_cronjobs(*args, **kwargs):

@@ -80,10 +80,10 @@
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right">
 						{% if user.is_authenticated %}
-							<li><a href="{% url "django.contrib.auth.views.password_change" %}">{% trans "Logged in as" %} <strong>{{ user.username }}</strong></a></li>
-							<li><a href="{% url "django.contrib.auth.views.logout_then_login" %}">{% trans "Logout" %}</a></li>
+							<li><a href="{% url "password_change" %}">{% trans "Logged in as" %} <strong>{{ user.username }}</strong></a></li>
+							<li><a href="{% url "logout_then_login" %}">{% trans "Logout" %}</a></li>
 						{% else %}
-							<li><a href="{% url "django.contrib.auth.views.login" %}">{% trans "Login" %}</a></li>
+							<li><a href="{% url "login" %}">{% trans "Login" %}</a></li>
 						{% endif %}
 					</ul>
 				</div>

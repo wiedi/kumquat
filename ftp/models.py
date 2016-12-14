@@ -14,5 +14,5 @@ class Account(models.Model):
 	def set_password(self, password):
 		self.password = sha512_crypt.encrypt(password)
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.name
