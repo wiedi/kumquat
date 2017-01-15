@@ -24,7 +24,7 @@ def issue_cert():
 			continue
 		try:
 			data = client.issue_certificate(
-				[unicode(vhost),] + list(vhost.vhostalias_set.values_list('alias', flat=True)),
+				[str(vhost),] + list(vhost.vhostalias_set.values_list('alias', flat=True)),
 				settings.LETSENCRYPT_STATE_FOLDER,
 				agree_to_tos_url = settings.LETSENCRYPT_TOS,
 				acme_server = settings.LETSENCRYPT_ACME_SERVER)
