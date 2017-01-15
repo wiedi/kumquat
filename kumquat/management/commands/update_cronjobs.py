@@ -5,17 +5,17 @@ from cron.models import Cronjob
 import subprocess
 
 def update_cronjobs():
-    cronlist = ''
-    cron = subprocess.Popen(settings.KUMQUAT_CRONJOB_CMD, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    for cronjob in Cronjob.objects.all():
-        cronlist += str(cronjob) + "\n"
+	cronlist = ''
+	cron = subprocess.Popen(settings.KUMQUAT_CRONJOB_CMD, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	for cronjob in Cronjob.objects.all():
+		cronlist += str(cronjob) + "\n"
 
-    cron.stdin.write(cronlist.encode('utf-8'))
-    cron.stdin.close()
+	cron.stdin.write(cronlist.encode('utf-8'))
+	cron.stdin.close()
 
 class Command(BaseCommand):
-    args = ''
-    help = 'generate new cronjobs and overwrite all existing'
+	args = ''
+	help = 'generate new cronjobs and overwrite all existing'
 
-    def handle(self, *args, **options):
-        update_cronjobs()
+	def handle(self, *args, **options):
+		update_cronjobs()
