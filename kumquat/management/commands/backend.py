@@ -10,8 +10,8 @@ from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.db import connection
 from web.models import VHost, SSLCert, DefaultVHost
-from update_vhosts import update_vhosts
-from update_cronjobs import update_cronjobs
+from .update_vhosts import update_vhosts
+from .update_cronjobs import update_cronjobs
 
 update_lock = lock.RLock()
 def locked_update_vhosts():
@@ -101,7 +101,7 @@ class Command(BaseCommand):
 	help = 'run backend service'
 
 	def handle(self, *args, **options):
-		os.umask(0007)
+		os.umask(0o007)
 		s = zerorpc.Server(Backend())
 		s.bind(settings.KUMQUAT_BACKEND_SOCKET)
 		s.run()
