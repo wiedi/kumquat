@@ -10,7 +10,7 @@ def update_cronjobs():
     for cronjob in Cronjob.objects.all():
         cronlist += str(cronjob) + "\n"
 
-    cron.stdin.write(cronlist)
+    cron.stdin.write(cronlist.encode('utf-8'))
     cron.stdin.close()
 
 class Command(BaseCommand):
