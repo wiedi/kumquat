@@ -52,7 +52,7 @@ def issue_cert():
 			letsencrypt_issued = True
 
 		except client.NeedToTakeAction as e:
-			vhost.letsencrypt.last_message = str(e)
+			vhost.letsencrypt.last_message = str(e)[:255]
 			vhost.letsencrypt.save()
 			for action in e.actions:
 				if isinstance(action, client.NeedToInstallFile):
@@ -60,7 +60,7 @@ def issue_cert():
 					with open(settings.LETSENCRYPT_ACME_FOLDER + '/' + file_name, 'w') as f:
 						f.write(action.contents)
 		except Exception as e:
-			vhost.letsencrypt.last_message = str(e)
+			vhost.letsencrypt.last_message = str(e)[:255]
 			vhost.letsencrypt.save()
 
 	if letsencrypt_issued and settings.KUMQUAT_USE_0RPC:
