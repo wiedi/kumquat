@@ -52,7 +52,7 @@ class VHostAlias(models.Model):
 
 class LetsEncrypt(models.Model):
 	vhost = AutoOneToOneField(VHost, on_delete=models.CASCADE)
-	last_message = models.CharField(max_length=default_length, blank=True)
+	last_message = models.TextField(blank=True)
 
 class SSLCert(models.Model):
 	cn               = models.CharField(max_length=default_length)

@@ -17,15 +17,6 @@ import re
 if settings.KUMQUAT_USE_0RPC:
 	import zerorpc
 
-def convert(data):
-	if isinstance(data, bytes):      return data.decode()
-	if isinstance(data, (str, int)): return str(data)
-	if isinstance(data, dict):       return dict(map(convert, data.items()))
-	if isinstance(data, tuple):      return tuple(map(convert, data))
-	if isinstance(data, list):       return list(map(convert, data))
-	if isinstance(data, set):        return set(map(convert, data))
-
-
 def issue_cert():
 	letsencrypt_issued = False
 	for vhost in VHost.objects.filter(use_letsencrypt=True):
@@ -38,9 +29,9 @@ def issue_cert():
 				agree_to_tos_url = settings.LETSENCRYPT_TOS,
 				acme_server = settings.LETSENCRYPT_ACME_SERVER)
 
-			chain = "\n".join(convert(data['chain']))
+			chain = "\n".join(data['chain'].decode())
 			cert = SSLCert()
-			cert.set_cert(cert=convert(data['cert']), key=convert(data['private_key']), ca=chain)
+			cert.set_cert(cert=data['cert'].decode(), key=data['private_key'].decode(), ca=chain)
 			cert.save()
 
 			vhost.cert = cert
@@ -52,15 +43,16 @@ def issue_cert():
 			letsencrypt_issued = True
 
 		except client.NeedToTakeAction as e:
-			vhost.letsencrypt.last_message = str(e)[:255]
-			vhost.letsencrypt.save()
+			vhost.letsencrypt.last_message = str(e)
 			for action in e.actions:
 				if isinstance(action, client.NeedToInstallFile):
 					file_name = re.sub(r'[^\w-]', '', action.file_name)
 					with open(settings.LETSENCRYPT_ACME_FOLDER + '/' + file_name, 'w') as f:
 						f.write(action.contents)
+					vhost.letsencrypt.last_message = ''
+			vhost.letsencrypt.save()
 		except Exception as e:
-			vhost.letsencrypt.last_message = str(e)[:255]
+			vhost.letsencrypt.last_message = str(e)
 			vhost.letsencrypt.save()
 
 	if letsencrypt_issued and settings.KUMQUAT_USE_0RPC:
