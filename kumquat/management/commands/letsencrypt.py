@@ -17,6 +17,15 @@ import re
 if settings.KUMQUAT_USE_0RPC:
 	import zerorpc
 
+def convert(data):
+	if isinstance(data, bytes):      return data.decode()
+	if isinstance(data, (str, int)): return str(data)
+	if isinstance(data, dict):       return dict(map(convert, data.items()))
+	if isinstance(data, tuple):      return tuple(map(convert, data))
+	if isinstance(data, list):       return list(map(convert, data))
+	if isinstance(data, set):        return set(map(convert, data))
+
+
 def issue_cert():
 	letsencrypt_issued = False
 	for vhost in VHost.objects.filter(use_letsencrypt=True):
@@ -29,9 +38,9 @@ def issue_cert():
 				agree_to_tos_url = settings.LETSENCRYPT_TOS,
 				acme_server = settings.LETSENCRYPT_ACME_SERVER)
 
-			chain = "\n".join(data['chain'])
+			chain = "\n".join(convert(data['chain']))
 			cert = SSLCert()
-			cert.set_cert(cert=data['cert'], key=data['private_key'], ca=chain)
+			cert.set_cert(cert=convert(data['cert']), key=convert(data['private_key']), ca=chain)
 			cert.save()
 
 			vhost.cert = cert
