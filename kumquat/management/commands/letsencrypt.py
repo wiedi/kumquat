@@ -29,9 +29,9 @@ def issue_cert():
 				agree_to_tos_url = settings.LETSENCRYPT_TOS,
 				acme_server = settings.LETSENCRYPT_ACME_SERVER)
 
-			chain = "\n".join(data['chain'])
+			chain = "\n".join(data['chain'].decode())
 			cert = SSLCert()
-			cert.set_cert(cert=data['cert'], key=data['private_key'], ca=chain)
+			cert.set_cert(cert=data['cert'].decode(), key=data['private_key'].decode(), ca=chain)
 			cert.save()
 
 			vhost.cert = cert
@@ -44,12 +44,13 @@ def issue_cert():
 
 		except client.NeedToTakeAction as e:
 			vhost.letsencrypt.last_message = str(e)
-			vhost.letsencrypt.save()
 			for action in e.actions:
 				if isinstance(action, client.NeedToInstallFile):
 					file_name = re.sub(r'[^\w-]', '', action.file_name)
 					with open(settings.LETSENCRYPT_ACME_FOLDER + '/' + file_name, 'w') as f:
 						f.write(action.contents)
+					vhost.letsencrypt.last_message = ''
+			vhost.letsencrypt.save()
 		except Exception as e:
 			vhost.letsencrypt.last_message = str(e)
 			vhost.letsencrypt.save()
