@@ -30,7 +30,7 @@ def tail(filename, n):
 	with open(filename, "rb") as f:
 		fm = mmap.mmap(f.fileno(), 0, mmap.MAP_SHARED, mmap.PROT_READ)
 		try:
-			for i in xrange(size - 1, -1, -1):
+			for i in range(size - 1, -1, -1):
 				if fm[i] == '\n':
 					n -= 1
 					if n == -1:
@@ -196,7 +196,7 @@ def vhostErrorLogList(request, pk):
 
 	log = []
 	for line in errorlog:
-		m = re.match(r"\[(?P<time>[^\]]+)\] \[(?P<module>[^\]]+)\] \[pid (?P<pid>\d+):tid (?P<tid>\d+)\] \[client (?P<client>[^\]]+)\] (?P<message>.+)", line)
+		m = re.match(r"\[(?P<time>[^\]]+)\] \[(?P<module>[^\]]+)\] \[pid (?P<pid>\d+):tid (?P<tid>\d+)\] \[client (?P<client>[^\]]+)\] (?P<message>.+)", line.decode())
 		if not m: continue
 		s = m.groupdict()
 		s['message'] = s['message'].replace('\\n', '\n').strip()
