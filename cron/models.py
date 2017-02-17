@@ -13,7 +13,7 @@ WHEN = (
 
 class Cronjob(models.Model):
 	when = models.CharField(verbose_name=_("When"), max_length=255, choices=WHEN)
-	command = models.CharField(verbose_name=_("Command"), max_length=1024, help_text=_("Posix shell command which will be exectured"))
+	command = models.CharField(verbose_name=_("Command"), max_length=1024, help_text=_("Posix shell command which will be executed"))
 
 	def __str__(self):
 		return self.when + " " + self.command
