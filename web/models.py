@@ -21,7 +21,7 @@ class VHost(models.Model):
 		return settings.KUMQUAT_VHOST_ROOT + '/' + str(self.punycode())
 
 	def __str__(self):
-		return str(self.name) + '.' + str(self.domain)
+		return bytes(self.name, encoding="utf-8").decode("idna") + '.' + str(self.domain)
 
 	def punycode(self):
 		return str(self.name) + '.' + str(self.domain.punycode())
@@ -34,6 +34,10 @@ class VHost(models.Model):
 		if self.cert.expire_soon():
 			return 'RENEW'
 		return 'VALID'
+
+	def save(self, **kwargs):
+		self.name = self.name.encode("idna")
+		super(VHost, self).save(**kwargs)
 
 	class Meta:
 		unique_together = (("name", "domain"),)
