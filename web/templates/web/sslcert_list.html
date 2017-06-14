@@ -7,6 +7,17 @@
 
 	{% bootstrap_messages %}
 
+	<br>
+	<ul class="nav nav-tabs">
+		<li role="presentation" {% if not show_expired %}class="active"{% endif %}>
+			<a href="{% url 'web_sslcert_list' %}">Current</a>
+		</li>
+		<li role="presentation" {% if     show_expired %}class="active"{% endif %}>
+			<a href="{% url 'web_sslcert_expiredlist' %}">Expired</a>
+		</li>
+	</ul>
+	<br>
+
 	<a href="{% url "web_sslcert_add" %}" class="btn btn-success pull-right">{% bootstrap_icon "plus" %} New</a>
 
 	{% if object_list %}

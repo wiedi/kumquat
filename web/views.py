@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
+from django.utils.timezone import now
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.conf import settings
@@ -113,6 +114,22 @@ def vhostAliasDelete(request, pk):
 
 class SSLCertList(LoginRequiredMixin, ListView):
 	model = SSLCert
+
+	def get_queryset(self):
+		return SSLCert.objects.filter(valid_not_after__gt = now())
+
+
+class ExpiredSSLCertList(LoginRequiredMixin, ListView):
+	model = SSLCert
+
+	def get_queryset(self):
+		return SSLCert.objects.filter(valid_not_after__lt = now())
+
+	def get_context_data(self, **kwargs):
+		context = super(ExpiredSSLCertList, self).get_context_data(**kwargs)
+		context['show_expired'] = True
+		return context
+
 
 @login_required
 def sslcertCreate(request):
