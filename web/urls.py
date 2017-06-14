@@ -23,7 +23,8 @@ urlpatterns = [
 	url(r'^vhost/(?P<pk>\d+)/snapshot/(?P<name>[A-Za-z0-9_-]+)/delete$',   views.vhostSnapshotDelete,   name='web_vhost_snapshot_delete'),
 
 	url(r'^sslcert/$',                          views.SSLCertList.as_view(),        name='web_sslcert_list'),
-	url(r'^sslcert/expired/$',                  views.ExpiredSSLCertList.as_view(), name='web_sslcert_expiredlist'),
+	url(r'^sslcert/expired/$',                  views.ExpiredSSLCertList.as_view(), name='web_sslcert_list_expired'),
 	url(r'^sslcert/add$',                       views.sslcertCreate,                name='web_sslcert_add'),
 	url(r'^sslcert/(?P<pk>\d+)/delete$',        views.SSLCertDelete.as_view(),      name='web_sslcert_delete'),
+	url(r'^sslcert/expired/delete/$',           views.sslcertDeleteExpired,         name='web_sslcert_delete_expired'),
 ]

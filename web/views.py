@@ -146,6 +146,12 @@ class SSLCertDelete(LoginRequiredMixin, DeleteView):
 	model = SSLCert
 	success_url = reverse_lazy('web_sslcert_list')
 
+@login_required
+@require_POST
+def sslcertDeleteExpired(request):
+	SSLCert.objects.filter(valid_not_after__lt = now()).delete()
+	return redirect('web_sslcert_list')
+
 
 # Snapshots
 

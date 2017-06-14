@@ -13,12 +13,21 @@
 			<a href="{% url 'web_sslcert_list' %}">Current</a>
 		</li>
 		<li role="presentation" {% if     show_expired %}class="active"{% endif %}>
-			<a href="{% url 'web_sslcert_expiredlist' %}">Expired</a>
+			<a href="{% url 'web_sslcert_list_expired' %}">Expired</a>
 		</li>
 	</ul>
 	<br>
 
-	<a href="{% url "web_sslcert_add" %}" class="btn btn-success pull-right">{% bootstrap_icon "plus" %} New</a>
+	<div class="text-right">
+		<a href="{% url "web_sslcert_add" %}" class="btn btn-success ">{% bootstrap_icon "plus" %} New</a>
+		{% if show_expired %}
+			<form action="{% url "web_sslcert_delete_expired" %}" method="post" class="confirm-delete form-inline" style="display: inline">
+				{% csrf_token %}
+				<input type="submit" value="{% trans "Clear Expired" %}" class="btn btn-danger"/>
+			</form>
+		{% endif %}
+	</div>
+	<br>
 
 	{% if object_list %}
 	<table class="table table-striped table-condensed table-hover">
@@ -46,7 +55,11 @@
 		</tr>
 	    {% endfor %}
 	</table>
-    {% else %}
-        <p>{% trans "You don't have any SSL Certificates yet." %}</p>
-    {% endif %}
+	{% else %}
+		{% if not show_expired %}
+			<p>{% trans "You don't have any SSL Certificates yet." %}</p>
+		{% else %}
+			<p>{% trans "No expired SSL Certificates." %}</p>
+		{% endif %}
+	{% endif %}
 {% endblock %}
