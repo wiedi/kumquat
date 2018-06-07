@@ -12,7 +12,10 @@ class DatabaseCreateForm(forms.Form):
 	def clean(self):
 		cleaned_data = super(DatabaseCreateForm, self).clean()
 
-		name     = cleaned_data.get("name")
+		name = cleaned_data.get("name")
+		if not name:
+			raise forms.ValidationError("Name invalid")
+
 		database = dbname(name)
 		cursor   = connections['kumquat_mysql'].cursor()
 
