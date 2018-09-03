@@ -3,7 +3,7 @@
 {% load bootstrap3 %}
 
 {% block content %}
-	<h1>{% trans "VHost Alias" %}</h1>
+	<h1>{% trans "VHost Alias" %}{% if object %} {{object}}{% endif %}</h1>
 	<form method="post" class="form-horizontal" enctype="multipart/form-data" role="form">
 		{% csrf_token %}
 		{% bootstrap_form form layout='horizontal' %}
