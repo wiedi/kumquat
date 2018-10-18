@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 WHEN = (
 		('0,5,10,15,20,25,30,35,40,45,50,55 * * * *', _('every 5 minutes')),
+		('0,15,30,45 * * * *',                        _('every 15 minutes')),
 		('0,30 * * * *',                              _('every 30 minutes')),
 		('0 * * * *',                                 _('hourly')),
 		('0 0 * * *',                                 _('daily')),
