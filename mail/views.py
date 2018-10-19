@@ -11,6 +11,7 @@ from kumquat.models import Domain
 from mail.models import Account, Redirect
 from mail.forms import AccountUpdateForm, AccountCreateForm
 import json
+import re
 
 # Accounts
 
@@ -94,9 +95,10 @@ def export(request):
 				"subaddress_extension": account.subaddress,
 			}]
 		for redirect in domain.redirect_set.all():
+			to = ",".join(re.sub("[\n,\s]", " ", redirect.to).split())
 			data[punycode_domain]["alias"] += [{
 				"name": redirect.name,
-				"to":   redirect.to,
+				"to":   to,
 			}]
 
 	return HttpResponse(json.dumps(data), content_type='application/json')
