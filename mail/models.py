@@ -24,7 +24,7 @@ class Account(models.Model):
 class Redirect(models.Model):
 	name   = models.CharField(max_length=default_length)
 	domain = models.ForeignKey(Domain)
-	to     = models.CharField(max_length=default_length)
+	to     = models.TextField()
 
 	class Meta:
 		unique_together = (('name', 'domain'),)
