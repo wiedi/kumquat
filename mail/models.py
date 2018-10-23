@@ -30,4 +30,4 @@ class Redirect(models.Model):
 		unique_together = (('name', 'domain'),)
 
 	def __str__(self):
-		return self.name + '@' + str(self.domain) + ' -> ' + self.to
+		return self.name + '@' + str(self.domain)
