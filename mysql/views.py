@@ -48,7 +48,10 @@ def databaseUpdate(request, slug):
 	if form.is_valid():
 		form.update_database(slug)
 		return redirect('mysql_database_list')
-	return render(request, 'mysql/database_password.html', {'form': form})
+	return render(request, 'mysql/database_password.html', {
+		'form': form,
+		'db': slug,
+	})
 
 
 @login_required
