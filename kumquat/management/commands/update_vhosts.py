@@ -6,6 +6,7 @@ from web.models import SSLCert, VHost
 from subprocess import call
 import uuid
 import os
+import time
 
 def write_certs():
 	file_list = []
@@ -30,13 +31,16 @@ def write_vhost_config():
 	with open(settings.KUMQUAT_VHOST_CONFIG, 'w') as f:
 		f.write(config)
 
+def reload_webserver():
+	call(settings.KUMQUAT_WEBSERVER_RELOAD, shell=True)
+
 def webroot(vhost):
-	return settings.KUMQUAT_VHOST_ROOT + '/' + vhost
+	return os.path.abspath(settings.KUMQUAT_VHOST_ROOT + '/' + vhost)
 
 def webroot_dataset(vhost):
 	return settings.KUMQUAT_VHOST_DATASET + '/' + vhost
 
-def update_filesystem():
+def update_vhosts():
 	dirs   = set(os.listdir(settings.KUMQUAT_VHOST_ROOT)) - set(['.Trash'])
 	vhosts = set([str(vhost.punycode()) for vhost in VHost.objects.all()])
 
@@ -52,24 +56,24 @@ def update_filesystem():
 		os.makedirs(webroot(vhost) + '/logs')
 		for p in [webroot(vhost), webroot(vhost) + '/htdocs']:
 			os.chown(p, settings.KUMQUAT_VHOST_UID, settings.KUMQUAT_VHOST_GID)
+		if settings.KUMQUAT_VHOST_POST_CREATE_CMD:
+			call(settings.KUMQUAT_VHOST_POST_CREATE_CMD + [webroot(vhost)])
+
+	write_certs()
+	write_vhost_config()
+	reload_webserver()
+
+	# wait for a bit to give the webserver a chance to close it's logfiles
+	time.sleep(5)
 
 	for vhost in remove:
 		deleted_name_suffix = '/.Trash/' + vhost + '-' + str(uuid.uuid4())
 		if settings.KUMQUAT_USE_ZFS:
-			call(['zfs', 'rename', '-p', webroot_dataset(vhost), settings.KUMQUAT_VHOST_DATASET + deleted_name_suffix])
+			call(['zfs', 'rename', '-fp', webroot_dataset(vhost), settings.KUMQUAT_VHOST_DATASET + deleted_name_suffix])
 		else:
 			os.rename(webroot(vhost), settings.KUMQUAT_VHOST_ROOT + deleted_name_suffix)
-
-
-def reload_webserver():
-	call(settings.KUMQUAT_WEBSERVER_RELOAD, shell=True)
-
-def update_vhosts():
-		write_certs()
-		write_vhost_config()
-		update_filesystem()
-		reload_webserver()
-
+		if settings.KUMQUAT_VHOST_POST_DELETE_CMD:
+			call(settings.KUMQUAT_VHOST_POST_DELETE_CMD + [webroot(vhost)])
 
 class Command(BaseCommand):
 	args = ''
