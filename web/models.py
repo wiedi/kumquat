@@ -52,7 +52,15 @@ class VHostAlias(models.Model):
 	vhost  = models.ForeignKey(VHost, blank=False)
 
 	def __str__(self):
+		return bytes(self.alias, encoding="utf-8").decode("idna")
+
+	def punycode(self):
 		return str(self.alias)
+
+	def save(self, **kwargs):
+		self.alias = self.alias.encode("idna")
+		super(VHostAlias, self).save(**kwargs)
+
 
 class LetsEncrypt(models.Model):
 	vhost = AutoOneToOneField(VHost, on_delete=models.CASCADE)
