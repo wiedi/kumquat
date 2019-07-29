@@ -29,7 +29,7 @@ class AccountCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 		self.object = form.save(commit=False)
 		self.object.set_password(password)
 		self.object.save()
-		return super(AccountCreate, self).form_valid(form)
+		return super().form_valid(form)
 
 
 class AccountUpdate(LoginRequiredMixin, UpdateView):
@@ -43,7 +43,7 @@ class AccountUpdate(LoginRequiredMixin, UpdateView):
 			self.object = form.save(commit=False)
 			self.object.set_password(new_password)
 			self.object.save()
-		return super(AccountUpdate, self).form_valid(form)
+		return super().form_valid(form)
 
 
 class AccountDelete(LoginRequiredMixin, DeleteView):

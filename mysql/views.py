@@ -37,7 +37,7 @@ class DatabaseCreate(LoginRequiredMixin, SuccessMessageMixin, FormView):
 
 	def form_valid(self, form):
 		form.create_database()
-		return super(DatabaseCreate, self).form_valid(form)
+		return super().form_valid(form)
 
 @login_required
 def databaseUpdate(request, slug):

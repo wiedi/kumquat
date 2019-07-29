@@ -17,6 +17,10 @@ class Account(models.Model):
 	def __str__(self):
 		return str(self.name) + '@' + str(self.domain)
 
+	def save(self, **kwargs):
+		self.name = self.name.lower()
+		super().save(**kwargs)
+
 	class Meta:
 		unique_together = (('name', 'domain'),)
 
@@ -26,8 +30,14 @@ class Redirect(models.Model):
 	domain = models.ForeignKey(Domain)
 	to     = models.TextField()
 
+	def __str__(self):
+		return self.name + '@' + str(self.domain)
+
+	def save(self, **kwargs):
+		self.name = self.name.lower()
+		self.to   = self.to.lower()
+		super().save(**kwargs)
+
 	class Meta:
 		unique_together = (('name', 'domain'),)
 
-	def __str__(self):
-		return self.name + '@' + str(self.domain)

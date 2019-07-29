@@ -10,7 +10,7 @@ class DatabaseCreateForm(forms.Form):
 	password = forms.CharField(widget=forms.widgets.PasswordInput, label = _("Password"))
 	
 	def clean(self):
-		cleaned_data = super(DatabaseCreateForm, self).clean()
+		cleaned_data = super().clean()
 
 		name = cleaned_data.get("name")
 		if not name:

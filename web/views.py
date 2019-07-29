@@ -126,7 +126,7 @@ class ExpiredSSLCertList(LoginRequiredMixin, ListView):
 		return SSLCert.objects.filter(valid_not_after__lt = now())
 
 	def get_context_data(self, **kwargs):
-		context = super(ExpiredSSLCertList, self).get_context_data(**kwargs)
+		context = super().get_context_data(**kwargs)
 		context['show_expired'] = True
 		return context
 

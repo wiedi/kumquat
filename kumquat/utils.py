@@ -8,14 +8,14 @@ import re
 class LoginRequiredMixin(object):
 	@method_decorator(login_required)
 	def dispatch(self, request, *args, **kwargs):
-		return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
+		return super().dispatch(request, *args, **kwargs)
 
 class SuccessActionFormMixin(object):
 	def success_action(self):
 		pass
 
 	def form_valid(self, form):
-		ret = super(SuccessActionFormMixin, self).form_valid(form)
+		ret = super().form_valid(form)
 		self.success_action()
 		return ret
 
@@ -24,7 +24,7 @@ class SuccessActionDeleteMixin(object):
 		pass
 
 	def delete(self, request, *args, **kwargs):
-		ret = super(SuccessActionDeleteMixin, self).delete(request, *args, **kwargs)
+		ret = super().delete(request, *args, **kwargs)
 		# this is a lie, we can't be sure the delte was successful
 		self.success_action()
 		return ret
@@ -40,14 +40,14 @@ class DomainNameValidator(RegexValidator):
 
 	def __init__(self, *args, **kwargs):
 		self.accept_idna = bool(kwargs.pop('accept_idna', True))
-		super(DomainNameValidator, self).__init__(*args, **kwargs)
+		super().__init__(*args, **kwargs)
 		if self.accept_idna:
 			self.message = 'Enter a valid plain or internationalized domain name value'
 
 	def __call__(self, value):
 		# validate
 		try:
-			super(DomainNameValidator, self).__call__(value)
+			super().__call__(value)
 		except ValidationError as e:
 			# maybe this is a unicode-encoded IDNA string?
 			if not self.accept_idna: raise
@@ -58,4 +58,4 @@ class DomainNameValidator(RegexValidator):
 			except UnicodeError:
 				raise e # raise the original ASCII error
 			# validate the ascii encoding of it
-			super(DomainNameValidator, self).__call__(asciival)
+			super().__call__(asciival)

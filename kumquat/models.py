@@ -12,5 +12,5 @@ class Domain(models.Model):
 		return self.name
 
 	def save(self, **kwargs):
-		self.name = self.name.encode("idna")
-		super(Domain, self).save(**kwargs)
+		self.name = self.name.encode("idna").lower()
+		super().save(**kwargs)
