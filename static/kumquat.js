@@ -27,4 +27,11 @@ $(function() {
 	$('#vhost_form').submit(function(){
 		$("select[name='cert']").removeAttr('disabled');
 	});
+	/* Active menu item will be highlighted */
+	var p = location.pathname.split('/');
+	var path = '/';
+	if( p.length > 2 ) {
+		path = '/' + p.slice(1,3).join('/') + '/';
+	}
+	$('a[href="' + path + '"]').closest('li').addClass('active'); 
 })
