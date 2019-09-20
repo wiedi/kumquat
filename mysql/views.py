@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 from django.contrib.messages.views import SuccessMessageMixin
-from django.db import connections
+from django.db import connections, transaction
 from django.http import Http404
 from kumquat.utils import LoginRequiredMixin
 from mysql.forms import *
@@ -64,7 +64,8 @@ def databaseDelete(request, slug):
 		
 	database = dbname(slug)
 	c = connections['kumquat_mysql'].cursor()
-	c.execute("drop user " + slug + "@'%'")
-	c.execute("drop user " + slug + "@localhost")
-	c.execute("drop database " + database)
+	with transaction.atomic(using='kumquat_mysql'):
+		c.execute("DROP USER %s@'%%'", [slug])
+		c.execute("DROP USER %s@'localhost'", [slug])
+		c.execute("DROP DATABASE " + database)
 	return redirect('mysql_database_list')

@@ -39,10 +39,12 @@ class DatabaseCreateForm(forms.Form):
 			# we can concat the database name with the query because only safe characters are allowed by the regex field
 			c.execute('CREATE DATABASE ' + database)
 			# clear possible previous permissions
-			c.execute("GRANT USAGE ON *.* TO %s", [name])
-			c.execute("DROP USER %s", [name])
-			c.execute("GRANT ALL ON " + database + ".* TO %s@'%%' IDENTIFIED BY %s", [name, password])
-			c.execute("GRANT ALL ON " + database + ".* TO %s@localhost IDENTIFIED BY %s", [name, password])
+			c.execute("DROP USER IF EXISTS %s@'%%'",        [name])
+			c.execute("DROP USER IF EXISTS %s@'localhost'", [name])
+			c.execute("CREATE USER %s@'%%'        IDENTIFIED BY %s PASSWORD EXPIRE NEVER", [name, password])
+			c.execute("CREATE USER %s@'localhost' IDENTIFIED BY %s PASSWORD EXPIRE NEVER", [name, password])
+			c.execute("GRANT ALL ON " + database + ".* TO %s@'%%' ", [name])
+			c.execute("GRANT ALL ON " + database + ".* TO %s@'localhost'", [name])
 
 class DatabaseUpdateForm(forms.Form):
 	new_password = forms.CharField(widget=forms.widgets.PasswordInput, label = _("Password"))
@@ -50,6 +52,6 @@ class DatabaseUpdateForm(forms.Form):
 	def update_database(self, name):
 		password = self.cleaned_data.get("new_password")
 		c = connections['kumquat_mysql'].cursor()
-		c.execute("set password for %s@'%%' = PASSWORD(%s)", (name, password))
-		c.execute("set password for %s@'localhost' = PASSWORD(%s)", (name, password))
-
+		with transaction.atomic(using='kumquat_mysql'):
+			c.execute("ALTER USER %s@'%%'        IDENTIFIED BY %s PASSWORD EXPIRE NEVER", [name, password])
+			c.execute("ALTER USER %s@'localhost' IDENTIFIED BY %s PASSWORD EXPIRE NEVER", [name, password])
