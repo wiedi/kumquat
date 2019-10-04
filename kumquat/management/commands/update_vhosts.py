@@ -54,7 +54,7 @@ def update_vhosts():
 			os.makedirs(webroot(vhost))
 		os.makedirs(webroot(vhost) + '/htdocs')
 		os.makedirs(webroot(vhost) + '/logs')
-		for p in [webroot(vhost), webroot(vhost) + '/htdocs']:
+		for p in [webroot(vhost), webroot(vhost) + '/logs', webroot(vhost) + '/htdocs']:
 			os.chown(p, settings.KUMQUAT_VHOST_UID, settings.KUMQUAT_VHOST_GID)
 		if settings.KUMQUAT_VHOST_POST_CREATE_CMD:
 			call(settings.KUMQUAT_VHOST_POST_CREATE_CMD + [webroot(vhost)])
