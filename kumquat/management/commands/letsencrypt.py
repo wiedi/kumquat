@@ -99,6 +99,11 @@ def challenge_body(new_order):
 
 	raise Exception('HTTP-01 challenge was not offered by the CA server.')
 
+def split_fullchain(fullchain_pem):
+	re_pem         = b"(-+BEGIN (?:.+)-+[\\r\\n]+(?:[A-Za-z0-9+/=]{1,64}[\\r\\n]+)+-+END (?:.+)-+[\\r\\n]+)"
+	cert, ca       = re.findall(re_pem, str.encode(fullchain_pem))
+	return cert.decode("ascii"), ca.decode("ascii")
+
 def issue_cert():
 	# Use or generate new account for ACME API
 	key, regr = account()
@@ -139,17 +144,13 @@ def issue_cert():
 		# Poll authorizations and finalize the order
 		try:
 			response, validation = challb.response_and_validation(client_acme.net.key)
-
-			x = client_acme.answer_challenge(challb, response)
+			client_acme.answer_challenge(challb, response)
 			finalized_order = client_acme.poll_and_finalize(new_order)
 
-			fullchain_pem  = str.encode(finalized_order.fullchain_pem)
-			re_pem         = b"(-+BEGIN (?:.+)-+[\\r\\n]+(?:[A-Za-z0-9+/=]{1,64}[\\r\\n]+)+-+END (?:.+)-+[\\r\\n]+)"
-			cert, ca       = re.findall(re_pem, fullchain_pem)
-			xcert = cert.decode("ascii")
-			xca   = ca.decode("ascii")
+			server_cert, ca  = split_fullchain(finalized_order.fullchain_pem)
+
 			cert = SSLCert()
-			cert.set_cert(cert=xcert, key=pkey_pem, ca=xca)
+			cert.set_cert(cert=server_cert, key=pkey_pem, ca=ca)
 			cert.save()
 
 			vhost.cert = cert
