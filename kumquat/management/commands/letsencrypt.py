@@ -160,8 +160,11 @@ def issue_cert():
 
 			letsencrypt_issued = True
 		except errors.ValidationError as e:
+			vhost.letsencrypt.last_message = ''
 			for rs in e.failed_authzrs:
-				print(rs)
+				for challenge in rs.body.challenges:
+					vhost.letsencrypt.last_message += str(challenge.error.detail)
+			vhost.letsencrypt.save()
 
 	if letsencrypt_issued and settings.KUMQUAT_USE_0RPC:
 		zerorpc.Client(connect_to=settings.KUMQUAT_BACKEND_SOCKET).update_vhosts()
