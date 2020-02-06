@@ -90,7 +90,7 @@ DATABASES = {
 	},
 	'kumquat_mysql': {
 		'ENGINE':   'django.db.backends.mysql',
-		'HOST':     '192.168.15.238',
+		'HOST':     '127.0.0.1',
 		'USER':     'root',
 		'PASSWORD': 'qwe123',
 	}
@@ -183,10 +183,13 @@ KUMQUAT_CRONJOB_CMD      = ['sudo', '-u', 'www', 'crontab']
 KUMQUAT_VHOST_POST_CREATE_CMD = None
 KUMQUAT_VHOST_POST_DELETE_CMD = None
 CORE_MAIL_TOKEN          = 'Soop6hoog6fohheagif8'
-LETSENCRYPT_TOS          = 'https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf'
-LETSENCRYPT_ACME_SERVER  = 'https://acme-v01.api.letsencrypt.org/directory'
+
+LETSENCRYPT_CERT_KEY_BITS = 4096
+LETSENCRYPT_ACCT_KEY_BITS = 4096
+LETSENCRYPT_ACME_SERVER  = 'https://acme-staging-v02.api.letsencrypt.org/directory'
 LETSENCRYPT_ACME_FOLDER  = '/opt/letsencrypt/acme/.well-known/acme-challenge/'
 LETSENCRYPT_STATE_FOLDER = '/opt/letsencrypt/state/'
+
 # valid whitelist values are described at https://mail.core.io/api/
 # set this to None (or leave it undefined) to whitelist the same domain as the account
 #CORE_MAIL_WHITELIST   = "*"
