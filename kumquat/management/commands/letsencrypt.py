@@ -117,6 +117,7 @@ def issue_cert():
 		if vhost.letsencrypt_state() not in ['REQUEST', 'RENEW']:
 			continue
 
+		# TODO: create new CSR if new domain / alias is added!
 		# For renewal we use the existinf private key for the certificate
 		# request.
 		pkey_pem = None
@@ -137,7 +138,7 @@ def issue_cert():
 		# Write well known data
 		token      = challb.path.rsplit('/', 1)[1]
 		validation = challb.validation(key)
-		path = os.path.join(settings.LETSENCRYPT_ACME_FOLDER, token)
+		path       = os.path.join(settings.LETSENCRYPT_ACME_FOLDER, token)
 		with open(path, 'w') as validation_file:
 			validation_file.write(validation)
 
@@ -145,7 +146,12 @@ def issue_cert():
 		try:
 			response, validation = challb.response_and_validation(client_acme.net.key)
 			client_acme.answer_challenge(challb, response)
+
+			# TODO: limit poll / timeout information, maybe add an max retry
+			#       and cancel request if possible
 			finalized_order = client_acme.poll_and_finalize(new_order)
+
+			# TODO: remove token file
 
 			server_cert, ca  = split_fullchain(finalized_order.fullchain_pem)
 
