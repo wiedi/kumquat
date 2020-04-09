@@ -97,11 +97,6 @@ def vhostAliasAdd(request, pk):
 		alias.vhost = v
 		alias.save()
 		update_vhosts()
-		# If Let's Encrypt is used and new alias is added, remove the
-		# certificate to automatically request a new one
-		if v.use_letsencrypt:
-			c = get_object_or_404(SSLCert, pk = v.cert.pk)
-			c.delete()
 		messages.success(request, _("Successfull added"))
 		return redirect('web_vhost_alias_list', v.pk)
 	return render(request, 'web/vhostalias_form.html', {'form': form})
