@@ -24,7 +24,7 @@
 			<td>{{ database.database }}</td>
 			{% endif %}
 			<td>
-				<form action="{% url "mysql_database_delete" database.name %}" method="post" class="confirm-delete">
+				<form action="{% url "mysql_database_delete" database.name %}" method="post" class="confirm-delete" data-name="{% trans "Delete Database" %}" data-value="{{ database.name }}">
 					{% csrf_token %}
 					<input type="hidden" name="name" value="{{ database.name }}">
 					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>

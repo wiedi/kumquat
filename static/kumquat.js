@@ -3,7 +3,7 @@ $(function() {
 		var form = $(this);
 		e.preventDefault();
 		bootbox.confirm({
-			title: "Delete " + form.attr('data-name') + " " + form.attr('data-value'),
+			title: form.attr('data-name') + " " + form.attr('data-value'),
 			message: "Are you sure?",
 			buttons: {
 				confirm: { label: 'Confirm', className: 'btn-success' },

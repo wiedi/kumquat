@@ -20,7 +20,7 @@
 		<tr>
 			<td>{{ alias }}</a></td>
 			<td>
-				<form action="{% url 'web_vhost_alias_delete' alias.pk %}" method="post" class="pull-left confirm-delete">
+				<form action="{% url 'web_vhost_alias_delete' alias.pk %}" method="post" class="pull-left confirm-delete" data-name="{% trans "Delete Alias" %}" data-value="{{ alias }}">
 					{% csrf_token %}
 					<input type="submit" value="{% trans 'Delete' %}" class="btn btn-xs btn-danger"/>
 				</form>

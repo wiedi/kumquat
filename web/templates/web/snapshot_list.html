@@ -24,14 +24,14 @@
 			<td>{{ snapshot.name }}</a></td>
 			<td>{{ snapshot.creation|date:"SHORT_DATETIME_FORMAT" }}</a></td>
 			<td>
-				<form action="{% url "web_vhost_snapshot_rollback" vhost.pk snapshot.name %}" method="post" class="pull-left confirm-delete">
+				<form action="{% url "web_vhost_snapshot_rollback" vhost.pk snapshot.name %}" method="post" class="pull-left confirm-delete" data-name="{% trans "Rollback" %}" data-value="{{ snapshot.name }}">
 					{% csrf_token %}
 					<input type="submit" value="{% trans "Rollback" %}" class="btn btn-xs btn-default"/>
 				</form>
 			</td>
 			<td>
 				{% if snapshot.user_created %}
-				<form action="{% url "web_vhost_snapshot_delete" vhost.pk snapshot.name %}" method="post" class="pull-left confirm-delete">
+				<form action="{% url "web_vhost_snapshot_delete" vhost.pk snapshot.name %}" method="post" class="pull-left confirm-delete" data-name="{% trans "Delete Snapshot" %}" data-value="{{ snapshot.name }}">
 					{% csrf_token %}
 					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>
 				</form>
