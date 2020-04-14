@@ -122,7 +122,7 @@ def issue_cert():
 			pkey_pem = vhost.key
 
 		# Generate a certificate request based on the vhost and aliases.
-		pkey_pem, csr_pem = gen_csr([str(vhost),] + list(vhost.vhostalias_set.values_list('alias', flat=True)), pkey_pem)
+		pkey_pem, csr_pem = gen_csr([str(vhost.punycode()),] + [vhostalias.punycode() for vhostalias in vhost.vhostalias_set.all()], pkey_pem)
 
 		# Create new certificate order
 		try:
