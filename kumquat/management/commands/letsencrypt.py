@@ -163,6 +163,9 @@ def issue_cert():
 			os.remove(path)
 
 			letsencrypt_issued = True
+		except errors.TimeoutError as e:
+			vhost.letsencrypt.last_message = 'Error when polling an authorization or an order times out!'
+			vhost.letsencrypt.save()
 		except errors.ValidationError as e:
 			vhost.letsencrypt.last_message = ''
 			for rs in e.failed_authzrs:
