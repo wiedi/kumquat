@@ -2,9 +2,16 @@ $(function() {
 	$(".confirm-delete").on("click", function(e) {
 		var form = $(this);
 		e.preventDefault();
-		bootbox.confirm("Are you sure?", function(result) {
-			if(result) {
-				form.submit()
+		bootbox.confirm({
+			title: form.attr('data-name') + " " + form.attr('data-value'),
+			message: "Are you sure?",
+			buttons: {
+				confirm: { label: 'Confirm', className: 'btn-success' },
+			},
+			callback: function (result) {
+				if(result) {
+					form.submit()
+				}
 			}
 		})
 	})

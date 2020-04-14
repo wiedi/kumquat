@@ -20,7 +20,7 @@
 			<td><a href="{% url "mail_redirect_update" redirect.id %}">{{ redirect.name }}@{{ redirect.domain }}</a></td>
 			<td><p class="text-limit">{{ redirect.to }}</p></td>
 			<td>
-				<form action="{% url "mail_redirect_delete" redirect.id %}" method="post" class="confirm-delete">
+				<form action="{% url "mail_redirect_delete" redirect.id %}" method="post" class="confirm-delete" data-name="{% trans "Delete Mail Redirect" %}" data-value="{{ redirect.name }}@{{ redirect.domain }} -> {{ redirect.to }}">
 					{% csrf_token %}
 					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>
 				</form>

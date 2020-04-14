@@ -21,7 +21,7 @@
 	<div class="text-right">
 		<a href="{% url "web_sslcert_add" %}" class="btn btn-success ">{% bootstrap_icon "plus" %} New</a>
 		{% if show_expired %}
-			<form action="{% url "web_sslcert_delete_expired" %}" method="post" class="confirm-delete form-inline" style="display: inline">
+			<form action="{% url "web_sslcert_delete_expired" %}" method="post" class="confirm-delete form-inline" style="display: inline" data-name="{% trans "Delete expired certificates" %}">
 				{% csrf_token %}
 				<input type="submit" value="{% trans "Clear Expired" %}" class="btn btn-danger"/>
 			</form>
@@ -47,7 +47,7 @@
 			<td>{{ cert.valid_not_before }}</td>
 			<td>{{ cert.valid_not_after }}</td>
 			<td>
-				<form action="{% url "web_sslcert_delete" cert.pk %}" method="post" class="confirm-delete">
+				<form action="{% url "web_sslcert_delete" cert.pk %}" method="post" class="confirm-delete" data-name="{% trans "Delete SSL Certificate with the Common Name" %}" data-value="{{ cert.cn }}">
 					{% csrf_token %}
 					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>
 				</form>

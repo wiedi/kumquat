@@ -45,7 +45,7 @@
 				<a href="{% url "web_vhost_snapshot_list" vhost.pk %}" class="btn btn-xs btn-default">{% trans "Snapshots" %}</a>
 				{% endif %}
 			</td><td>
-				<form action="{% url "web_vhost_delete" vhost.pk %}" method="post" class="pull-left confirm-delete">
+				<form action="{% url "web_vhost_delete" vhost.pk %}" method="post" class="pull-left confirm-delete" data-name="{% trans "Delete VHost" %}" data-value="{{ vhost }}">
 					{% csrf_token %}
 					<input type="submit" value="{% trans "Delete" %}" class="btn btn-xs btn-danger"/>
 				</form>
