@@ -19,6 +19,14 @@ $(function() {
 			$('.form-password :input').attr('type', 'password');
 		}
 	});
+	$('.generate-password').on('click', function(e) {
+		e.preventDefault();
+		$('.form-password input').val(generatePassword());
+		if ($('.show-hide-password').hasClass('glyphicon-eye-close')) {
+			$('.show-hide-password').toggleClass('glyphicon-eye-close').toggleClass('glyphicon-eye-open');
+			$('.form-password :input').attr('type', 'text');
+		}
+	});
 	if ($("input[name='use_letsencrypt']").is(':checked')) {
 		$("select[name='cert']").attr("disabled", true);
 	}
