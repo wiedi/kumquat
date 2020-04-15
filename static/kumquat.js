@@ -11,7 +11,14 @@ $(function() {
 	setTimeout(function() {
 		$(".alert").alert('close')
 	}, 1000 * 10)
-
+	$('.show-hide-password').on('click', function() {
+		$(this).toggleClass('glyphicon-eye-close').toggleClass('glyphicon-eye-open');
+		if ($(this).hasClass('glyphicon-eye-open')) {
+			$('.form-password :input').attr('type', 'text');
+		} else {
+			$('.form-password :input').attr('type', 'password');
+		}
+	});
 	if ($("input[name='use_letsencrypt']").is(':checked')) {
 		$("select[name='cert']").attr("disabled", true);
 	}
