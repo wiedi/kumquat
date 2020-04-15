@@ -7,7 +7,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>{% block title %}Kumquat{% endblock %}</title>
+		<title>{% block title %}Kumquat{% if settings.KUMQUAT_SITE_NAME %} - {{ settings.KUMQUAT_SITE_NAME }}{% endif %}{% endblock %}</title>
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 		<style>
@@ -81,7 +81,7 @@
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<a class="navbar-brand" href="{% url 'status' %}">Kumquat</a>
+					<a class="navbar-brand" href="{% url 'status' %}">Kumquat{% if settings.KUMQUAT_SITE_NAME %} - {{ settings.KUMQUAT_SITE_NAME }}{% endif %}</a>
 				</div>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right">
