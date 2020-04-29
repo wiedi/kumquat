@@ -80,6 +80,15 @@ TEMPLATES = [
 	},
 ]
 
+BOOTSTRAP3 = {
+	'jquery_url': '/static/jquery.min.js',
+	'base_url': '/static/bootstrap/',
+	'css_url': '/static/bootstrap/bootstrap.min.css',
+	'theme_url': '/static/bootstrap/bootstrap-theme.min.css',
+	'javascript_url': '/static/bootstrap/bootstrap.min.js',
+	'include_jquery': True,
+}
+
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
