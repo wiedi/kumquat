@@ -6,7 +6,8 @@
 	<h1>{% trans "Add Database" %}</h1>
 	<form method="post" class="form-horizontal" role="form">
 		{% csrf_token %}
-		{% bootstrap_form form layout='horizontal' %}
+		{% bootstrap_field form.name layout='horizontal' %}
+		{% bootstrap_field form.password layout='horizontal' addon_before_class='input-group-btn' addon_before='<button class="btn btn-default generate-password" type="button">Generate</button>' addon_after='<span class="glyphicon glyphicon-eye-close show-hide-password"></span>' form_group_class='form-group form-password' %}
 		{% buttons layout='horizontal' submit='OK' %}
 		{% endbuttons %}
 	</form>

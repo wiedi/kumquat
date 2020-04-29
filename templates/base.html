@@ -74,6 +74,10 @@
 			text-overflow: ellipsis;
 			max-width: 100ch;
 		}
+		.form-password .input-group-addon {
+			cursor: pointer;
+			pointer-events: all;
+		}
 		</style>
 		{% block extrahead %}{% endblock %}
 	</head>
@@ -130,6 +134,7 @@
 		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.2.0/bootbox.min.js"></script>
+		<script src="{% static "password-generator.min.js" %}"></script>
 		<script src="{% static "kumquat.js" %}"></script>
 	</body>
 </html>
