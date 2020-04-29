@@ -21,7 +21,7 @@ $(function() {
 	});
 	$('.generate-password').on('click', function(e) {
 		e.preventDefault();
-		$('.form-password input').val(generatePassword());
+		$('.form-password input').val(generatePassword((Math.floor(Math.random() * (20 - 15)) + 15), false));
 		if ($('.show-hide-password').hasClass('glyphicon-eye-close')) {
 			$('.show-hide-password').toggleClass('glyphicon-eye-close').toggleClass('glyphicon-eye-open');
 			$('.form-password :input').attr('type', 'text');
