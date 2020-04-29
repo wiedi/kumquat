@@ -8,8 +8,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>{% block title %}Kumquat{% if settings.KUMQUAT_SITE_NAME %} - {{ settings.KUMQUAT_SITE_NAME }}{% endif %}{% endblock %}</title>
-		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+		{% bootstrap_css %}
 		<style>
 		body {
 		  padding-top: 50px;
@@ -131,9 +130,8 @@
 				</div>
 			</div>
 		</div>
-		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.2.0/bootbox.min.js"></script>
+		{% bootstrap_javascript %}
+		<script src="{% static "bootstrap/bootbox.min.js" %}"></script>
 		<script src="{% static "password-generator.min.js" %}"></script>
 		<script src="{% static "kumquat.js" %}"></script>
 	</body>
