@@ -161,6 +161,7 @@ LOGGING = {
 }
 
 # kumquat
+KUMQUAT_SITE_NAME        = ''
 
 KUMQUAT_BACKEND_SOCKET   = "ipc:///tmp/kumquat_backend"
 KUMQUAT_CERT_PATH        = '/opt/local/etc/openssl/kumquat/'
@@ -200,4 +201,5 @@ SETTINGS_EXPORT = [
 	'KUMQUAT_PHPMYADMIN_URL',
 	'KUMQUAT_USE_ZFS',
 	'KUMQUAT_USE_0RPC',
+	'KUMQUAT_SITE_NAME',
 ]
