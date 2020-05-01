@@ -119,7 +119,7 @@ def issue_cert():
 
 		pkey_pem = None
 		if vhost.letsencrypt_state() is 'RENEW':
-			pkey_pem = vhost.key
+			pkey_pem = vhost.cert.key
 
 		# Generate a certificate request based on the vhost and aliases.
 		pkey_pem, csr_pem = gen_csr([str(vhost.punycode()),] + [vhostalias.punycode() for vhostalias in vhost.vhostalias_set.all()], pkey_pem)
