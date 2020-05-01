@@ -110,7 +110,7 @@ def issue_cert():
 
 	vhosts = [vhost for vhost in VHost.objects.filter(use_letsencrypt=True) if vhost.letsencrypt_state() in ['REQUEST', 'RENEW']]
 	if not vhosts:
-		continue
+		return
 
 	net = client.ClientNetwork(key = key, account = regr)
 	directory = messages.Directory.from_json(net.get(settings.LETSENCRYPT_ACME_SERVER).json())
