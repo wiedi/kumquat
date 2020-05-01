@@ -108,15 +108,16 @@ def issue_cert():
 	# Use or generate new account for ACME API
 	key, regr = account()
 
+	vhosts = [vhost for vhost in VHost.objects.filter(use_letsencrypt=True) if vhost.letsencrypt_state() in ['REQUEST', 'RENEW']]
+	if not vhosts:
+		continue
+
 	net = client.ClientNetwork(key = key, account = regr)
 	directory = messages.Directory.from_json(net.get(settings.LETSENCRYPT_ACME_SERVER).json())
 	client_acme = client.ClientV2(directory, net=net)
 
 	letsencrypt_issued = False
-	for vhost in VHost.objects.filter(use_letsencrypt=True):
-		if vhost.letsencrypt_state() not in ['REQUEST', 'RENEW']:
-			continue
-
+	for vhost in vhosts:
 		pkey_pem = None
 		if vhost.letsencrypt_state() is 'RENEW':
 			pkey_pem = vhost.cert.key
