@@ -131,6 +131,7 @@ def issue_cert():
 		except Exception as e:
 			vhost.letsencrypt.last_message = str(e)
 			vhost.letsencrypt.save()
+			continue
 
 		# Write well known data
 		token      = challb.path.rsplit('/', 1)[1]
