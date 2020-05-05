@@ -88,6 +88,7 @@ def challenge_body(new_order):
 	# Authorization Resource: authz.
 	# This object holds the offered challenges by the server and their status.
 	authz_list = new_order.authorizations
+	challenge = []
 
 	for authz in authz_list:
 		# Choosing challenge.
@@ -95,7 +96,8 @@ def challenge_body(new_order):
 		for i in authz.body.challenges:
 			# Find the supported challenge.
 			if isinstance(i.chall, challenges.HTTP01):
-				return i
+				challenge += [i]
+	return challenge
 
 	raise Exception('HTTP-01 challenge was not offered by the CA server.')
 
@@ -126,30 +128,33 @@ def issue_cert():
 		pkey_pem, csr_pem = gen_csr([str(vhost.punycode()),] + [vhostalias.punycode() for vhostalias in vhost.vhostalias_set.all()], pkey_pem)
 
 		# Create new certificate order
+		challbs = []
 		try:
 			new_order = client_acme.new_order(csr_pem)
-			challb    = challenge_body(new_order)
+			challbs  += challenge_body(new_order)
 		except Exception as e:
 			vhost.letsencrypt.last_message = str(e)
 			vhost.letsencrypt.save()
 			continue
 
-		# Write well known data
-		token      = challb.path.rsplit('/', 1)[1]
-		validation = challb.validation(key)
-		path       = os.path.join(settings.LETSENCRYPT_ACME_FOLDER, token)
-		with open(path, 'w') as validation_file:
-			validation_file.write(validation)
+		# Write tokens for validation for each vhost and alias
+		for challb in challbs:
+			# Write well known data
+			token      = challb.path.rsplit('/', 1)[1]
+			validation = challb.validation(key)
+			path       = os.path.join(settings.LETSENCRYPT_ACME_FOLDER, token)
+			with open(path, 'w') as validation_file:
+				validation_file.write(validation)
 
-		# Poll authorizations and finalize the order
-		try:
+			# Poll authorizations and finalize the order
 			response, validation = challb.response_and_validation(client_acme.net.key)
 			client_acme.answer_challenge(challb, response)
-
-			# Default Timeout after 90 seconds
+	
+		# Finalize the order
+		# Default Timeout after 90 seconds
+		try:
 			finalized_order = client_acme.poll_and_finalize(new_order)
-
-			server_cert, ca  = split_fullchain(finalized_order.fullchain_pem)
+			server_cert, ca = split_fullchain(finalized_order.fullchain_pem)
 
 			cert = SSLCert()
 			cert.set_cert(cert=server_cert, key=pkey_pem, ca=ca)
