@@ -104,4 +104,5 @@ class Command(BaseCommand):
 		os.umask(0o007)
 		s = zerorpc.Server(Backend())
 		s.bind(settings.KUMQUAT_BACKEND_SOCKET)
+		os.umask(0o002)
 		s.run()
