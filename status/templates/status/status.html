@@ -69,9 +69,35 @@
 		<td>{{info.mem.mem_nover}}</td>
 	</tr>
 	{% endif %}
-</tr>
 </tbody>
 </table>
+
+	{% if le_info %}
+	<h3>{% trans "Let's Encrypt Status" %}</h3>
+	<table class="table table-bordered table-hover">
+	<tbody>
+		{% for le in le_info %}
+		<tr>
+			<td><a href="{% url "web_vhost_update" le.vhost.pk %}">{{ le.vhost }}</a></td>
+			<td>
+			{% if le.vhost.letsencrypt_state == 'REQUEST' %}
+				<span class="label label-info">
+					{% trans "Requesting" %}
+			{% elif le.vhost.letsencrypt_state == 'VALID' %}
+				<span class="label label-success">
+					{% trans "Valid" %}
+			{% elif le.vhost.letsencrypt_state == 'RENEW' %}
+				<span class="label label-warning">
+					{% trans "Renewing" %}
+			{% endif %}
+				</span>
+			</td>
+			<td>{{ le.last_message|truncatechars:120 }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+	</table>
+	{% endif %}
 
 
 

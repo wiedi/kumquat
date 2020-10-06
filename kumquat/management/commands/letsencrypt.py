@@ -12,6 +12,7 @@ import os
 import io
 import pstats
 import re
+import sys
 
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
@@ -114,9 +115,14 @@ def issue_cert():
 	if not vhosts:
 		return
 
-	net = client.ClientNetwork(key = key, account = regr)
-	directory = messages.Directory.from_json(net.get(settings.LETSENCRYPT_ACME_SERVER).json())
-	client_acme = client.ClientV2(directory, net=net)
+	try:
+		net = client.ClientNetwork(key = key, account = regr)
+		directory = messages.Directory.from_json(net.get(settings.LETSENCRYPT_ACME_SERVER).json())
+		client_acme = client.ClientV2(directory, net=net)
+	except Exception as e:
+		sys.stderr.write("Connection issues to " + str(settings.LETSENCRYPT_ACME_SERVER) + "\n")
+		sys.stderr.write("Verify current Let's Encrypt status via https://letsencrypt.status.io/\n")
+		sys.exit(1)
 
 	letsencrypt_issued = False
 	for vhost in vhosts:
