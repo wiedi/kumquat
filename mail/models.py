@@ -7,7 +7,7 @@ default_length = 255
 
 class Account(models.Model):
 	name       = models.CharField(max_length=default_length)
-	domain     = models.ForeignKey(Domain, related_name='mail_accounts')
+	domain     = models.ForeignKey(Domain, related_name='mail_accounts', on_delete=models.CASCADE)
 	password   = models.CharField(max_length=default_length)
 	subaddress = models.BooleanField(verbose_name=_('Subaddress extension'), help_text=_('Enable subaddress extension (e.g. primary+sub@example.com'), default=False)
 
@@ -27,7 +27,7 @@ class Account(models.Model):
 
 class Redirect(models.Model):
 	name   = models.CharField(max_length=default_length)
-	domain = models.ForeignKey(Domain)
+	domain = models.ForeignKey(Domain, on_delete=models.CASCADE)
 	to     = models.TextField()
 
 	def __str__(self):

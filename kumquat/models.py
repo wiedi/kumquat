@@ -12,5 +12,5 @@ class Domain(models.Model):
 		return self.name
 
 	def save(self, **kwargs):
-		self.name = self.name.encode("idna").lower()
+		self.name = self.name.encode("idna").decode("utf-8").lower()
 		super().save(**kwargs)

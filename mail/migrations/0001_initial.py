@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255)),
                 ('password', models.CharField(max_length=255)),
                 ('subaddress', models.BooleanField(default=False, help_text='Enable subaddress extension (e.g. primary+sub@example.com', verbose_name='Subaddress extension')),
-                ('domain', models.ForeignKey(related_name='mail_accounts', to='kumquat.Domain')),
+                ('domain', models.ForeignKey(related_name='mail_accounts', to='kumquat.Domain', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=255)),
                 ('to', models.CharField(max_length=255)),
-                ('domain', models.ForeignKey(to='kumquat.Domain')),
+                ('domain', models.ForeignKey(to='kumquat.Domain', on_delete=models.CASCADE)),
             ],
         ),
         migrations.AlterUniqueTogether(

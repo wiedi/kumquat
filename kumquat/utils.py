@@ -54,7 +54,8 @@ class DomainNameValidator(RegexValidator):
 			if not value: raise
 			# convert it unicode -> ascii
 			try:
-				asciival = smart_text(value).encode('idna')
+				asciival = smart_text(value).encode('idna').decode('ascii')
+				print(asciival)
 			except UnicodeError:
 				raise e # raise the original ASCII error
 			# validate the ascii encoding of it
