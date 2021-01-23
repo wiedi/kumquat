@@ -13,7 +13,7 @@ default_length = 255
 
 class VHost(models.Model):
 	name   = models.CharField(max_length=default_length, verbose_name=_('Sub Domain'), help_text=_('Child part of your domain that is used to organize your site content.'), validators=[DomainNameValidator()])
-	domain = models.ForeignKey(Domain, blank=False)
+	domain = models.ForeignKey(Domain, blank=False, on_delete=models.CASCADE)
 	cert   = models.ForeignKey('SSLCert', blank=True, null=True, on_delete=models.SET_NULL, verbose_name='SSL Certificate')
 	use_letsencrypt = models.BooleanField(verbose_name=_('SSL Certificate managed by Let\'s Encrypt'), default=False)
 
@@ -36,7 +36,7 @@ class VHost(models.Model):
 		return 'VALID'
 
 	def save(self, **kwargs):
-		self.name = self.name.encode("idna")
+		self.name = self.name.encode("idna").decode("utf-8")
 		super(VHost, self).save(**kwargs)
 
 	class Meta:
@@ -44,12 +44,12 @@ class VHost(models.Model):
 
 
 class DefaultVHost(models.Model):
-	domain = models.OneToOneField(Domain, primary_key=True)
-	vhost  = models.ForeignKey(VHost, blank=False)
+	domain = models.OneToOneField(Domain, primary_key=True, on_delete=models.CASCADE)
+	vhost  = models.ForeignKey(VHost, blank=False, on_delete=models.CASCADE)
 
 class VHostAlias(models.Model):
 	alias  = models.CharField(max_length=default_length, verbose_name=_('Alias'), help_text=_('Server alias for virtual host.'), validators=[DomainNameValidator()], unique=True)
-	vhost  = models.ForeignKey(VHost, blank=False)
+	vhost  = models.ForeignKey(VHost, blank=False, on_delete=models.CASCADE)
 
 	def __str__(self):
 		return bytes(self.alias, encoding="utf-8").decode("idna")

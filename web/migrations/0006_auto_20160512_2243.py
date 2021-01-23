@@ -27,6 +27,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='letsencrypt',
             name='vhost',
-            field=models.OneToOneField(to='web.VHost'),
+            field=models.OneToOneField(to='web.VHost', on_delete=models.CASCADE),
         ),
     ]

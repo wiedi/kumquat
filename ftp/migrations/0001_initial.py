@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(unique=True, max_length=255)),
                 ('password', models.CharField(max_length=255)),
                 ('path', models.CharField(default=b'/', max_length=255)),
-                ('vhost', models.ForeignKey(blank=True, to='web.VHost', null=True)),
+                ('vhost', models.ForeignKey(blank=True, to='web.VHost', null=True, on_delete=models.CASCADE)),
             ],
         ),
     ]

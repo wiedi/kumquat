@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.core.exceptions import PermissionDenied
 from django.conf import settings
 from django.views.generic import ListView

@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='letsencrypt',
             name='vhost',
-            field=annoying.fields.AutoOneToOneField(to='web.VHost'),
+            field=annoying.fields.AutoOneToOneField(to='web.VHost', on_delete=models.CASCADE),
         ),
     ]
