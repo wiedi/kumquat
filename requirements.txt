@@ -1,5 +1,5 @@
 acme==1.7.0
-cryptography==2.9.2
+cryptography==3.3.2
 Django==2.2.20
 django-annoying==0.10.3
 django-bootstrap3==14.2.0
