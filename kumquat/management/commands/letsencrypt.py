@@ -103,9 +103,9 @@ def challenge_body(new_order):
 	raise Exception('HTTP-01 challenge was not offered by the CA server.')
 
 def split_fullchain(fullchain_pem):
-	re_pem         = b"(-+BEGIN (?:.+)-+[\\r\\n]+(?:[A-Za-z0-9+/=]{1,64}[\\r\\n]+)+-+END (?:.+)-+[\\r\\n]+)"
-	cert, ca       = re.findall(re_pem, str.encode(fullchain_pem))
-	return cert.decode("ascii"), ca.decode("ascii")
+	re_pem    = "(-+BEGIN (?:.+)-+[\\r\\n]+(?:[A-Za-z0-9+/=]{1,64}[\\r\\n]+)+-+END (?:.+)-+[\\r\\n]+)"
+	cert, *ca = re.findall(re_pem, fullchain_pem)
+	return cert, ''.join(ca)
 
 def issue_cert():
 	# Use or generate new account for ACME API
