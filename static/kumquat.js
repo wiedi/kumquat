@@ -55,5 +55,5 @@ $(function() {
 	if( p.length > 2 ) {
 		path = '/' + p.slice(1,3).join('/') + '/';
 	}
-	$('a[href="' + path + '"]').closest('li').addClass('active'); 
+	$('.nav-sidebar a[href="' + path + '"]').closest('li').addClass('active');
 })
