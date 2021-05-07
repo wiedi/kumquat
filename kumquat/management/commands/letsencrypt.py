@@ -163,7 +163,7 @@ def issue_cert():
 			server_cert, ca = split_fullchain(finalized_order.fullchain_pem)
 
 			cert = SSLCert()
-			cert.set_cert(cert=server_cert, key=pkey_pem, ca=ca)
+			cert.set_cert(cert=server_cert, key=pkey_pem.decode(), ca=ca)
 			cert.save()
 
 			vhost.cert = cert

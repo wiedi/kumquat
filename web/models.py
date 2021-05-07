@@ -21,10 +21,10 @@ class VHost(models.Model):
 		return settings.KUMQUAT_VHOST_ROOT + '/' + str(self.punycode())
 
 	def __str__(self):
-		return bytes(self.name, encoding="utf-8").decode("idna") + '.' + str(self.domain)
+		return self.name.encode().decode("idna") + '.' + str(self.domain)
 
 	def punycode(self):
-		return str(self.name) + '.' + str(self.domain.punycode())
+		return self.name + '.' + str(self.domain.punycode())
 
 	def letsencrypt_state(self):
 		if not self.use_letsencrypt:
@@ -36,7 +36,7 @@ class VHost(models.Model):
 		return 'VALID'
 
 	def save(self, **kwargs):
-		self.name = self.name.encode("idna").decode("utf-8")
+		self.name = self.name.encode("idna").decode()
 		super(VHost, self).save(**kwargs)
 
 	class Meta:
@@ -52,14 +52,14 @@ class VHostAlias(models.Model):
 	vhost  = models.ForeignKey(VHost, blank=False, on_delete=models.CASCADE)
 
 	def __str__(self):
-		return bytes(self.alias, encoding="utf-8").decode("idna")
+		return self.alias.encode().decode("idna")
 
 	def punycode(self):
-		return str(self.alias)
+		return self.alias
 
 	def save(self, **kwargs):
-		self.alias = self.alias.encode("idna")
-		super(VHostAlias, self).save(**kwargs)
+		self.alias = self.alias.encode("idna").decode()
+		super().save(**kwargs)
 
 
 class LetsEncrypt(models.Model):
