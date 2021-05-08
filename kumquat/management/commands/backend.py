@@ -38,7 +38,7 @@ class Backend(object):
 
 		v = get_object_or_404(VHost, pk = vhost)
 		snapshots = []
-		ds = settings.KUMQUAT_VHOST_DATASET + '/' + str(v)
+		ds = v.dataset_root()
 		try:
 			out = check_output(['zfs', 'list', '-o', 'name,creation,core:user_created', '-rpHt', 'snapshot', ds]).decode("utf-8")
 		except:
@@ -63,7 +63,7 @@ class Backend(object):
 			raise Exception("Invalid snapshot name")
 
 		v = get_object_or_404(VHost, pk = vhost)
-		ds = settings.KUMQUAT_VHOST_DATASET + '/' + str(v)
+		ds = v.dataset_root()
 		snap = ds + '@user_' + name
 		try:
 			check_output(['zfs', 'snapshot', snap])
@@ -79,7 +79,7 @@ class Backend(object):
 			raise Exception("Snapshots only supported with ZFS")
 
 		v = get_object_or_404(VHost, pk = vhost)
-		ds = settings.KUMQUAT_VHOST_DATASET + '/' + str(v)
+		ds = v.dataset_root()
 		call(['zfs', 'rollback', '-r', ds + '@' + name])
 
 	def snapshot_delete(self, vhost, name):
@@ -88,7 +88,7 @@ class Backend(object):
 			raise Exception("Snapshots only supported with ZFS")
 
 		v = get_object_or_404(VHost, pk = vhost)
-		ds = settings.KUMQUAT_VHOST_DATASET + '/' + str(v)
+		ds = v.dataset_root()
 		snap = ds + '@' + name
 		user_created = check_output(['zfs', 'get', '-Hp', 'core:user_created',  snap]).decode("utf-8").strip().split()[2]
 		if user_created == '-':

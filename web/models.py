@@ -18,13 +18,16 @@ class VHost(models.Model):
 	use_letsencrypt = models.BooleanField(verbose_name=_('SSL Certificate managed by Let\'s Encrypt'), default=False)
 
 	def webroot(self):
-		return settings.KUMQUAT_VHOST_ROOT + '/' + str(self.punycode())
+		return settings.KUMQUAT_VHOST_ROOT + '/' + self.punycode()
+
+	def dataset_root(self):
+		return settings.KUMQUAT_VHOST_DATASET + '/' + self.punycode()
 
 	def __str__(self):
 		return self.name.encode().decode("idna") + '.' + str(self.domain)
 
 	def punycode(self):
-		return self.name + '.' + str(self.domain.punycode())
+		return self.name + '.' + self.domain.punycode()
 
 	def letsencrypt_state(self):
 		if not self.use_letsencrypt:
