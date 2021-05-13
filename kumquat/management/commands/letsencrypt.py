@@ -78,7 +78,7 @@ def gen_csr(domain_names, pkey_pem=None):
 	if pkey_pem is None:
 		pkey = OpenSSL.crypto.PKey()
 		pkey.generate_key(OpenSSL.crypto.TYPE_RSA, settings.LETSENCRYPT_CERT_KEY_BITS)
-		pkey_pem = OpenSSL.crypto.dump_privatekey(OpenSSL.crypto.FILETYPE_PEM, pkey)
+		pkey_pem = OpenSSL.crypto.dump_privatekey(OpenSSL.crypto.FILETYPE_PEM, pkey).decode()
 
 	# Generate CSR based on the domains
 	csr_pem = crypto_util.make_csr(pkey_pem, domain_names)
@@ -163,7 +163,7 @@ def issue_cert():
 			server_cert, ca = split_fullchain(finalized_order.fullchain_pem)
 
 			cert = SSLCert()
-			cert.set_cert(cert=server_cert, key=pkey_pem.decode(), ca=ca)
+			cert.set_cert(cert=server_cert, key=pkey_pem, ca=ca)
 			cert.save()
 
 			vhost.cert = cert
