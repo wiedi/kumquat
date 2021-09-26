@@ -16,6 +16,7 @@ class VHost(models.Model):
 	domain = models.ForeignKey(Domain, blank=False, on_delete=models.CASCADE)
 	cert   = models.ForeignKey('SSLCert', blank=True, null=True, on_delete=models.SET_NULL, verbose_name='SSL Certificate')
 	use_letsencrypt = models.BooleanField(verbose_name=_('SSL Certificate managed by Let\'s Encrypt'), default=False)
+	access_logging = models.BooleanField(verbose_name=_('Enable web server access log'), default=False)
 
 	def webroot(self):
 		return settings.KUMQUAT_VHOST_ROOT + '/' + self.punycode()
