@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 import re
@@ -54,7 +54,7 @@ class DomainNameValidator(RegexValidator):
 			if not value: raise
 			# convert it unicode -> ascii
 			try:
-				asciival = smart_text(value).encode('idna').decode('ascii')
+				asciival = smart_str(value).encode('idna').decode('ascii')
 			except UnicodeError:
 				raise e # raise the original ASCII error
 			# validate the ascii encoding of it
