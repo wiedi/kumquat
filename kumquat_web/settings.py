@@ -68,6 +68,7 @@ TEMPLATES = [
 			'debug': True,
 			'context_processors': [
 				'django.contrib.auth.context_processors.auth',
+				'django.template.context_processors.request',
 				'django.template.context_processors.debug',
 				'django.template.context_processors.i18n',
 				'django.template.context_processors.media',
@@ -123,6 +124,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 LOGIN_REDIRECT_URL = '/'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Logging
 # https://docs.djangoproject.com/en/dev/topics/logging/
