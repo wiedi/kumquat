@@ -4,7 +4,7 @@ from django.views.generic.edit import FormView
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db import connections, transaction
 from django.http import Http404

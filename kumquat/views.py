@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.contrib.messages.views import SuccessMessageMixin
 from kumquat.models import Domain
 from kumquat.utils import LoginRequiredMixin

@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import include, url
+from django.urls import include, re_path
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
@@ -10,17 +10,17 @@ admin.autodiscover()
 
 
 urlpatterns = [
-	url(r'^$',       status, name='status'),
-	url(r'^system/', include('kumquat.urls')),
-	url(r'^ftp/',    include('ftp.urls')),
-	url(r'^mysql/',  include('mysql.urls')),
-	url(r'^web/',    include('web.urls')),
-	url(r'^mail/',   include('mail.urls')),
-	url(r'^cron/',   include('cron.urls')),
-	url(r'^admin/',  admin.site.urls),
+	re_path(r'^$',       status, name='status'),
+	re_path(r'^system/', include('kumquat.urls')),
+	re_path(r'^ftp/',    include('ftp.urls')),
+	re_path(r'^mysql/',  include('mysql.urls')),
+	re_path(r'^web/',    include('web.urls')),
+	re_path(r'^mail/',   include('mail.urls')),
+	re_path(r'^cron/',   include('cron.urls')),
+	re_path(r'^admin/',  admin.site.urls),
 
-	url(r'',         include('django.contrib.auth.urls')),
+	re_path(r'',         include('django.contrib.auth.urls')),
 
-	url(r'^accounts/login/$',  auth_views.LoginView.as_view(), name='login'),
-	url(r'^accounts/logout/$', logout_then_login, name='logout_then_login'),
+	re_path(r'^accounts/login/$',  auth_views.LoginView.as_view(), name='login'),
+	re_path(r'^accounts/logout/$', logout_then_login, name='logout_then_login'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
