@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from django.conf import settings
 from subprocess import check_output
 import os
 import json
@@ -39,13 +40,23 @@ def imageinfo():
 			return {}
 
 def diskinfo():
-		out = check_output(["df", "-k", "/"]).strip().split(b'\n')
-		vals = out[-1].split()
+		if settings.KUMQUAT_USE_ZFS:
+				vals = check_output(["zfs", "list", "-pH", "/"]).split(b'\t')
+				size = int(vals[1]) + int(vals[2])
+				used = int(vals[1])
+				free = int(vals[2])
+		else:
+				out = check_output(["df", "-k", "/"]).strip().split(b'\n')
+				vals = out[-1].split()
+				size = int(vals[1]) * 1024
+				used = int(vals[2]) * 1024
+				free = int(vals[3]) * 1024
+
 		return {
-				'size': int(vals[1]) * 1024,
-				'used': int(vals[2]) * 1024,
-				'free': int(vals[3]) * 1024,
-				'use':  int((int(vals[2]) / float(vals[1])) * 100),
+				'size': size,
+				'used': used,
+				'free': free,
+				'use':  int((used / size) * 100)
 		}
 
 def info():
