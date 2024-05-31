@@ -19,7 +19,7 @@ def write_certs():
 
 def write_vhost_config():
 	config = ''
-	for vhost in VHost.objects.all().annotate(is_defaultvhost=Count('defaultvhost')).order_by('is_defaultvhost'):
+	for vhost in VHost.objects.filter(is_enabled = True).annotate(is_defaultvhost=Count('defaultvhost')).order_by('is_defaultvhost'):
 		context = {
 			'vhost': vhost,
 		}

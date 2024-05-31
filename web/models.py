@@ -15,6 +15,7 @@ class VHost(models.Model):
 	name   = models.CharField(max_length=default_length, verbose_name=_('Sub Domain'), help_text=_('Child part of your domain that is used to organize your site content.'), validators=[DomainNameValidator()])
 	domain = models.ForeignKey(Domain, blank=False, on_delete=models.CASCADE)
 	cert   = models.ForeignKey('SSLCert', blank=True, null=True, on_delete=models.SET_NULL, verbose_name='SSL Certificate')
+	is_enabled = models.BooleanField(verbose_name=_('Enable virtual host'), default=True)
 	use_letsencrypt = models.BooleanField(verbose_name=_('SSL Certificate managed by Let\'s Encrypt'), default=False)
 	access_logging = models.BooleanField(verbose_name=_('Enable web server access log'), default=False)
 

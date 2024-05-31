@@ -111,7 +111,7 @@ def issue_cert():
 	# Use or generate new account for ACME API
 	key, regr = account()
 
-	vhosts = [vhost for vhost in VHost.objects.filter(use_letsencrypt=True) if vhost.letsencrypt_state() in ['REQUEST', 'RENEW']]
+	vhosts = [vhost for vhost in VHost.objects.filter(use_letsencrypt=True, is_enabled=True) if vhost.letsencrypt_state() in ['REQUEST', 'RENEW']]
 	if not vhosts:
 		return
 
