@@ -7,5 +7,5 @@ django-messagegroups==0.4.5
 django-settings-export==1.2.1
 mysqlclient==2.1.1
 passlib==1.7.4
-pyOpenSSL==21.0.0
+pyOpenSSL==23.3.0
 zerorpc==0.6.3
