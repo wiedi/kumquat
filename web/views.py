@@ -13,7 +13,7 @@ from django.http import Http404
 from datetime import datetime
 from kumquat.utils import LoginRequiredMixin, SuccessActionFormMixin, SuccessActionDeleteMixin
 from web.models import VHost, SSLCert, DefaultVHost, VHostAlias
-from web.forms import SSLCertForm, SnapshotForm, VHostAliasForm
+from web.forms import SSLCertForm, SnapshotForm, VHostAliasForm, VHostForm
 if settings.KUMQUAT_USE_0RPC:
 	import zerorpc
 import mmap
@@ -48,14 +48,14 @@ class VHostList(LoginRequiredMixin, ListView):
 
 class VHostCreate(LoginRequiredMixin, SuccessMessageMixin, SuccessActionFormMixin, CreateView):
 	model = VHost
-	fields = ('name', 'domain', 'cert', 'is_enabled', 'use_letsencrypt', 'access_logging')
+	form_class = VHostForm
 	success_url = reverse_lazy('web_vhost_list')
 	success_message = _("%(name)s was created successfully")
 	success_action = update_vhosts
 
 class VHostUpdate(LoginRequiredMixin, SuccessActionFormMixin, UpdateView):
 	model = VHost
-	fields = ['cert', 'is_enabled', 'use_letsencrypt', 'access_logging']
+	form_class = VHostForm
 	success_url = reverse_lazy('web_vhost_list')
 	success_action = update_vhosts
 

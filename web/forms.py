@@ -1,7 +1,8 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 from OpenSSL import SSL, crypto
-from .models import VHostAlias
+from .models import VHostAlias, VHost
 
 class SSLCertForm(forms.Form):
 	cert = forms.FileField(label = _("Certificate"))
@@ -39,3 +40,11 @@ class VHostAliasForm(forms.ModelForm):
 
 class SnapshotForm(forms.Form):
 	name     = forms.RegexField(max_length=16, regex=r'^[a-z0-9_-]+$', label = _("Name"))
+
+class VHostForm(forms.ModelForm):
+	class Meta:
+		model = VHost
+		fields = ['name', 'domain', 'cert', 'php_version', 'is_enabled', 'use_letsencrypt', 'access_logging']
+		widgets = {
+			'php_version': forms.Select(choices=[(v, f'PHP {v}') for v in settings.KUMQUAT_PHP_VERSIONS.keys()])
+		}

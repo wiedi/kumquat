@@ -18,6 +18,7 @@ class VHost(models.Model):
 	is_enabled = models.BooleanField(verbose_name=_('Enable virtual host'), default=True)
 	use_letsencrypt = models.BooleanField(verbose_name=_('SSL Certificate managed by Let\'s Encrypt'), default=False)
 	access_logging = models.BooleanField(verbose_name=_('Enable web server access log'), default=False)
+	php_version = models.CharField(max_length=10, verbose_name=_('PHP Version'), default=settings.KUMQUAT_PHP_DEFAULT_VERSION, help_text=_('PHP version to use for this virtual host'))
 
 	def webroot(self):
 		return settings.KUMQUAT_VHOST_ROOT + '/' + self.punycode()
@@ -39,6 +40,9 @@ class VHost(models.Model):
 		if self.cert.expire_soon():
 			return 'RENEW'
 		return 'VALID'
+
+	def php_socket_path(self):
+		return settings.KUMQUAT_PHP_VERSIONS.get(self.php_version, settings.KUMQUAT_PHP_VERSIONS[settings.KUMQUAT_PHP_DEFAULT_VERSION])
 
 	def save(self, **kwargs):
 		self.name = self.name.encode("idna").decode()
