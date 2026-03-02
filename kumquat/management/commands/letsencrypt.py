@@ -81,7 +81,7 @@ def gen_csr(domain_names, pkey_pem=None):
 		pkey_pem = OpenSSL.crypto.dump_privatekey(OpenSSL.crypto.FILETYPE_PEM, pkey).decode()
 
 	# Generate CSR based on the domains
-	csr_pem = crypto_util.make_csr(pkey_pem, domain_names)
+	csr_pem = crypto_util.make_csr(pkey_pem.encode("utf-8"), domain_names)
 	return pkey_pem, csr_pem
 
 def challenge_body(new_order):
