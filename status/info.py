@@ -41,7 +41,10 @@ def imageinfo():
 
 def diskinfo():
 		if settings.KUMQUAT_USE_ZFS:
-				vals = check_output(["zfs", "list", "-pH", "/"]).split(b'\t')
+				try:
+					vals = check_output(["zfs", "list", "-pH", "/"]).split(b'\t')
+				except FileNotFoundError:
+					vals = (0, 1, 0, 0)
 				size = int(vals[1]) + int(vals[2])
 				used = int(vals[1])
 				free = int(vals[2])
