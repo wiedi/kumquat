@@ -207,6 +207,13 @@ LETSENCRYPT_STATE_FOLDER = '/opt/letsencrypt/state/'
 # set this to None (or leave it undefined) to whitelist the same domain as the account
 #CORE_MAIL_WHITELIST   = "*"
 
+# PHP version configuration
+KUMQUAT_PHP_VERSIONS = {
+	'7.4': '/tmp/php74.sock',
+	'8.4': '/tmp/php.sock',  # default
+}
+KUMQUAT_PHP_DEFAULT_VERSION = '8.4'
+
 # Allow the following variables in the template
 SETTINGS_EXPORT = [
 	'KUMQUAT_WEBMAIL_URL',
@@ -214,4 +221,6 @@ SETTINGS_EXPORT = [
 	'KUMQUAT_USE_ZFS',
 	'KUMQUAT_USE_0RPC',
 	'KUMQUAT_SITE_NAME',
+	'KUMQUAT_PHP_VERSIONS',
+	'KUMQUAT_PHP_DEFAULT_VERSION',
 ]

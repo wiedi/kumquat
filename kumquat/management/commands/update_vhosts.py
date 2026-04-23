@@ -23,6 +23,8 @@ def write_vhost_config():
 		context = {
 			'vhost': vhost,
 		}
+		if not vhost.is_active:
+			continue
 		try:
 			config += render_to_string('web/vhost-' + str(vhost.punycode()) + '.conf', context)
 		except:
@@ -30,6 +32,11 @@ def write_vhost_config():
 
 	with open(settings.KUMQUAT_VHOST_CONFIG, 'w') as f:
 		f.write(config)
+
+def update_invalid_php_versions():
+	VHost.objects.exclude(
+		php_version__in=list(settings.KUMQUAT_PHP_VERSIONS.keys()) + ["DISABLED", ""]
+	).update(php_version="")
 
 def reload_webserver():
 	call(settings.KUMQUAT_WEBSERVER_RELOAD, shell=True)
@@ -41,6 +48,8 @@ def webroot_dataset(vhost):
 	return settings.KUMQUAT_VHOST_DATASET + '/' + vhost
 
 def update_vhosts():
+	update_invalid_php_versions()
+
 	dirs   = set(os.listdir(settings.KUMQUAT_VHOST_ROOT)) - set(['.Trash'])
 	vhosts = set([str(vhost.punycode()) for vhost in VHost.objects.all()])
 

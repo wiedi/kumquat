@@ -18,6 +18,7 @@ class VHost(models.Model):
 	is_enabled = models.BooleanField(verbose_name=_('Enable virtual host'), default=True)
 	use_letsencrypt = models.BooleanField(verbose_name=_('SSL Certificate managed by Let\'s Encrypt'), default=False)
 	access_logging = models.BooleanField(verbose_name=_('Enable web server access log'), default=False)
+	php_version = models.CharField(max_length=10, blank=True, verbose_name=_('PHP Version'), default="", help_text=_('PHP version to use for this virtual host'))
 
 	def webroot(self):
 		return settings.KUMQUAT_VHOST_ROOT + '/' + self.punycode()
@@ -39,6 +40,24 @@ class VHost(models.Model):
 		if self.cert.expire_soon():
 			return 'RENEW'
 		return 'VALID'
+
+	def is_active(self):
+		if self.is_enabled and self.php_socket_path() is not False:
+			return True
+		return False
+
+	def php_socket_path(self):
+		"""
+		Returns the path to the php socket
+		OR None for no php
+		OR False to disable the VHost via is_active()
+		"""
+
+		if self.php_version == "DISABLED":
+			return None
+		if not self.php_version:
+			return settings.KUMQUAT_PHP_VERSIONS[settings.KUMQUAT_PHP_DEFAULT_VERSION]
+		return settings.KUMQUAT_PHP_VERSIONS.get(self.php_version, False)
 
 	def save(self, **kwargs):
 		self.name = self.name.encode("idna").decode()

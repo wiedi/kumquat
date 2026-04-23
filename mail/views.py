@@ -95,7 +95,7 @@ def export(request):
 				"subaddress_extension": account.subaddress,
 			}]
 		for redirect in domain.redirect_set.all():
-			to = ",".join(re.sub("[\n,\s]", " ", redirect.to).split())
+			to = ",".join(re.sub(r"[\n,\s]", " ", redirect.to).split())
 			data[punycode_domain]["alias"] += [{
 				"name": redirect.name,
 				"to":   to,
