@@ -46,5 +46,11 @@ class VHostForm(forms.ModelForm):
 		model = VHost
 		fields = ['name', 'domain', 'cert', 'php_version', 'is_enabled', 'use_letsencrypt', 'access_logging']
 		widgets = {
-			'php_version': forms.Select(choices=[(v, f'PHP {v}') for v in settings.KUMQUAT_PHP_VERSIONS.keys()])
+			'php_version': forms.Select(
+				choices=[
+					("", _("Default (%(version)s)") % {"version": settings.KUMQUAT_PHP_DEFAULT_VERSION}),
+					("DISABLED", _("Disabled")),
+				] + [
+					(v, f'PHP {v}') for v in settings.KUMQUAT_PHP_VERSIONS.keys()
+				])
 		}
